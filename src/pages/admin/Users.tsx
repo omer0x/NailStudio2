@@ -39,9 +39,9 @@ const AdminUsers = () => {
           throw new Error('No users found');
         }
 
-        // Then, fetch emails from auth.users
+        // Then, fetch emails from auth.users using the correct schema
         const { data: authUsers, error: authError } = await supabase
-          .from('users')
+          .from('users', { schema: 'auth' })
           .select('id, email')
           .in('id', profiles.map(profile => profile.id));
 

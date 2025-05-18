@@ -13,6 +13,7 @@ interface Appointment {
   created_at: string;
   user_profiles: {
     full_name: string | null;
+    email: string;
   };
   time_slot: {
     start_time: string;

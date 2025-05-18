@@ -27,33 +27,33 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // Fetch user profiles - this will work with RLS policies
+        // First, fetch user profiles
         const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
-          .select(`
-            id,
-            full_name,
-            phone,
-            is_admin,
-            created_at,
-            users (
-              email
-            )
-          `)
+          .select('id, full_name, phone, is_admin, created_at')
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;
-        
-        // Transform the data to match our UserProfile interface
-        const transformedData = profileData.map(profile => ({
-          id: profile.id,
-          full_name: profile.full_name,
-          phone: profile.phone,
-          is_admin: profile.is_admin,
-          created_at: profile.created_at,
-          // @ts-ignore - we know users exists from the join
-          email: profile.users?.email || 'Unknown'
-        }));
+
+        // Then, fetch emails from auth.users for these profiles
+        const { data: authData, error: authError } = await supabase
+          .from('auth.users')
+          .select('id, email');
+
+        if (authError) throw authError;
+
+        // Merge the profile data with auth data
+        const transformedData = profileData.map(profile => {
+          const authUser = authData.find(user => user.id === profile.id);
+          return {
+            id: profile.id,
+            full_name: profile.full_name,
+            phone: profile.phone,
+            is_admin: profile.is_admin,
+            created_at: profile.created_at,
+            email: authUser?.email || 'Unknown'
+          };
+        });
         
         setUsers(transformedData);
         setFilteredUsers(transformedData);

@@ -48,9 +48,33 @@ const BookAppointment = () => {
   const [totalDuration, setTotalDuration] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<{ id: string } | null>(null);
   
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  // Check for user profile
+  useEffect(() => {
+    const checkUserProfile = async () => {
+      if (!user) return;
+
+      try {
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .select('id')
+          .eq('id', user.id)
+          .single();
+
+        if (error) throw error;
+        setUserProfile(data);
+      } catch (error) {
+        console.error('Error checking user profile:', error);
+        // Don't set error here as we'll handle it during booking
+      }
+    };
+
+    checkUserProfile();
+  }, [user]);
   
   // Fetch services and time slots
   useEffect(() => {
@@ -195,6 +219,12 @@ const BookAppointment = () => {
   const handleSubmitBooking = async () => {
     if (!user) {
       navigate('/login');
+      return;
+    }
+
+    // Check if user profile exists
+    if (!userProfile) {
+      setError('Please complete your profile before booking an appointment. Go to My Account to update your profile.');
       return;
     }
     

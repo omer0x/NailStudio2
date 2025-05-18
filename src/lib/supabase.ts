@@ -17,7 +17,8 @@ export async function signUp(email: string, password: string, fullName?: string)
     password,
     options: {
       data: {
-        full_name: fullName || ''
+        full_name: fullName || '',
+        phone: null
       }
     }
   });

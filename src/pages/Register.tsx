@@ -37,11 +37,16 @@ const Register = () => {
     setRegisterError(null);
     
     try {
-      const { data: userData, error } = await signUp(
-        data.email, 
-        data.password, 
-        data.fullName
-      );
+      const { data: userData, error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data: {
+            full_name: data.fullName,
+            phone: data.phone || null
+          }
+        }
+      });
       
       if (error) {
         if (error.message.includes('Email rate limit exceeded')) {
@@ -53,6 +58,24 @@ const Register = () => {
       }
       
       if (userData) {
+        // Create user profile with phone number
+        const { error: profileError } = await supabase
+          .from('user_profiles')
+          .insert([
+            {
+              id: userData.user!.id,
+              full_name: data.fullName,
+              phone: data.phone || null,
+              is_admin: false
+            }
+          ]);
+
+        if (profileError) {
+          console.error('Error creating user profile:', profileError);
+          setRegisterError('Failed to create user profile. Please try again.');
+          return;
+        }
+
         // Redirect to login after successful registration
         navigate('/login', { 
           state: { 

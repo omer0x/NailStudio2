@@ -56,20 +56,28 @@ const BookAppointment = () => {
   // Check for user profile
   useEffect(() => {
     const checkUserProfile = async () => {
-      if (!user) return;
+      if (!user) {
+        setUserProfile(null);
+        return;
+      }
 
       try {
         const { data, error } = await supabase
           .from('user_profiles')
           .select('id')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error checking user profile:', error);
+          setUserProfile(null);
+          return;
+        }
+
         setUserProfile(data);
       } catch (error) {
         console.error('Error checking user profile:', error);
-        // Don't set error here as we'll handle it during booking
+        setUserProfile(null);
       }
     };
 

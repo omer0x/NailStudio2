@@ -27,33 +27,36 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // First, fetch user profiles
-        const { data: profileData, error: profileError } = await supabase
+        // Fetch user profiles with their emails using a join
+        const { data: users, error: profileError } = await supabase
           .from('user_profiles')
-          .select('id, full_name, phone, is_admin, created_at')
+          .select(`
+            id,
+            full_name,
+            phone,
+            is_admin,
+            created_at,
+            users!inner (
+              email
+            )
+          `)
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;
 
-        // Then, fetch emails from auth.users for these profiles
-        const { data: authData, error: authError } = await supabase
-          .from('auth.users')
-          .select('id, email');
+        if (!users) {
+          throw new Error('No users found');
+        }
 
-        if (authError) throw authError;
-
-        // Merge the profile data with auth data
-        const transformedData = profileData.map(profile => {
-          const authUser = authData.find(user => user.id === profile.id);
-          return {
-            id: profile.id,
-            full_name: profile.full_name,
-            phone: profile.phone,
-            is_admin: profile.is_admin,
-            created_at: profile.created_at,
-            email: authUser?.email || 'Unknown'
-          };
-        });
+        // Transform the data to match our UserProfile interface
+        const transformedData: UserProfile[] = users.map(user => ({
+          id: user.id,
+          full_name: user.full_name,
+          phone: user.phone,
+          is_admin: user.is_admin,
+          created_at: user.created_at,
+          email: user.users.email
+        }));
         
         setUsers(transformedData);
         setFilteredUsers(transformedData);

@@ -27,48 +27,39 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // First, fetch auth users with emails
-        const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
-        
-        if (authError) throw authError;
-        
-        // Then fetch user profiles
+        // Fetch user profiles - this will work with RLS policies
         const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
-          .select('*')
+          .select(`
+            id,
+            full_name,
+            phone,
+            is_admin,
+            created_at,
+            users (
+              email
+            )
+          `)
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;
         
-        // Combine the data
-        const combinedData = profileData.map(profile => {
-          const authUser = authData.users.find(user => user.id === profile.id);
-          return {
-            ...profile,
-            email: authUser?.email || 'Unknown',
-          };
-        });
+        // Transform the data to match our UserProfile interface
+        const transformedData = profileData.map(profile => ({
+          id: profile.id,
+          full_name: profile.full_name,
+          phone: profile.phone,
+          is_admin: profile.is_admin,
+          created_at: profile.created_at,
+          // @ts-ignore - we know users exists from the join
+          email: profile.users?.email || 'Unknown'
+        }));
         
-        setUsers(combinedData);
-        setFilteredUsers(combinedData);
+        setUsers(transformedData);
+        setFilteredUsers(transformedData);
       } catch (error) {
         console.error('Error fetching users:', error);
         setError('Failed to load users. Please try again.');
-        
-        // Attempt to fetch just profiles if auth data fails
-        try {
-          const { data, error } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .order('created_at', { ascending: false });
-          
-          if (error) throw error;
-          
-          setUsers(data.map(profile => ({ ...profile, email: 'Not available' })));
-          setFilteredUsers(data.map(profile => ({ ...profile, email: 'Not available' })));
-        } catch (fallbackError) {
-          console.error('Fallback error fetching users:', fallbackError);
-        }
       } finally {
         setIsLoading(false);
       }

@@ -13,7 +13,6 @@ interface Appointment {
   created_at: string;
   user_profiles: {
     full_name: string | null;
-    email: string;
   };
   time_slot: {
     start_time: string;
@@ -58,8 +57,7 @@ const AdminAppointments = () => {
             notes,
             created_at,
             user_profiles (
-              full_name,
-              email
+              full_name
             ),
             time_slot:time_slots (
               start_time

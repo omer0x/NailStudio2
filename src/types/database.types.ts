@@ -114,6 +114,7 @@ export interface Database {
           phone: string | null
           is_admin: boolean
           created_at: string
+          email: string
         }
         Insert: {
           id: string

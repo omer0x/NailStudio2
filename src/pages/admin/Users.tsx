@@ -27,8 +27,8 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // Fetch user profiles with their emails using a join
-        const { data: users, error: profileError } = await supabase
+        // Fetch user profiles and join with auth.users to get emails
+        const { data: profiles, error: profileError } = await supabase
           .from('user_profiles')
           .select(`
             id,
@@ -36,26 +36,24 @@ const AdminUsers = () => {
             phone,
             is_admin,
             created_at,
-            users!inner (
-              email
-            )
+            email:auth.users!user_profiles_id_fkey(email)
           `)
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;
 
-        if (!users) {
+        if (!profiles) {
           throw new Error('No users found');
         }
 
         // Transform the data to match our UserProfile interface
-        const transformedData: UserProfile[] = users.map(user => ({
-          id: user.id,
-          full_name: user.full_name,
-          phone: user.phone,
-          is_admin: user.is_admin,
-          created_at: user.created_at,
-          email: user.users.email
+        const transformedData: UserProfile[] = profiles.map(profile => ({
+          id: profile.id,
+          full_name: profile.full_name,
+          phone: profile.phone,
+          is_admin: profile.is_admin,
+          created_at: profile.created_at,
+          email: profile.email?.email || 'No email found' // Handle nested email data
         }));
         
         setUsers(transformedData);

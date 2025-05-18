@@ -27,16 +27,11 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // Fetch user profiles and join with auth.users to get emails
         const { data: profiles, error: profileError } = await supabase
           .from('user_profiles')
           .select(`
-            id,
-            full_name,
-            phone,
-            is_admin,
-            created_at,
-            email:auth.users!user_profiles_id_fkey(email)
+            *,
+            auth_user:auth.users(email)
           `)
           .order('created_at', { ascending: false });
         
@@ -53,7 +48,7 @@ const AdminUsers = () => {
           phone: profile.phone,
           is_admin: profile.is_admin,
           created_at: profile.created_at,
-          email: profile.email?.email || 'No email found' // Handle nested email data
+          email: profile.auth_user?.[0]?.email || 'No email found'
         }));
         
         setUsers(transformedData);

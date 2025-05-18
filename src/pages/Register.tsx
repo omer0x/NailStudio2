@@ -40,18 +40,21 @@ const Register = () => {
       const { data: userData, error } = await signUp(data.email, data.password);
       
       if (error) {
-        setRegisterError(error.message);
+        if (error.message.includes('Email rate limit exceeded')) {
+          setRegisterError('Too many signup attempts. Please try again later.');
+        } else {
+          setRegisterError(error.message);
+        }
         return;
       }
       
       if (userData) {
-        // Create user profile
         const { error: profileError } = await supabase.from('user_profiles').insert([
           {
             id: userData.user?.id,
             full_name: data.fullName,
             phone: data.phone || null,
-            is_admin: false,
+            is_admin: false
           },
         ]);
         
@@ -61,7 +64,11 @@ const Register = () => {
           return;
         }
         
-        navigate('/book');
+        navigate('/login', { 
+          state: { 
+            message: 'Registration successful! You can now log in.' 
+          }
+        });
       }
     } catch (error) {
       setRegisterError('An unexpected error occurred. Please try again.');

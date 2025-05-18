@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../types/database.types';
 
-// Initialize Supabase client using environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
@@ -15,27 +14,31 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 export async function signUp(email: string, password: string, fullName?: string) {
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
-    password,
+    password, 
+    options: {
+      emailRedirectTo: `${window.location.origin}/login`,
+      data: {
+        full_name: fullName || null
+      }
+    }
   });
   
   if (authError || !authData.user) {
     return { data: authData, error: authError };
   }
 
-  // Create user profile after successful signup
   const { error: profileError } = await supabase
     .from('user_profiles')
     .insert([
       {
         id: authData.user.id,
         full_name: fullName || null,
-        is_admin: false,
+        is_admin: false
       }
     ]);
 
   if (profileError) {
     console.error('Error creating user profile:', profileError);
-    // Sign out the user if profile creation fails
     await supabase.auth.signOut();
     return { 
       data: null, 

@@ -137,20 +137,6 @@ const Login = () => {
             <Link to="/reset-password" className="text-pink-600 hover:underline">Forgot your password?</Link>
           </p>
         </div>
-        
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <p className="text-sm text-gray-500 mb-2 text-center">Demo Account</p>
-          <Button 
-            variant="outline" 
-            fullWidth
-            onClick={fillAdminCredentials}
-          >
-            Fill Admin Credentials
-          </Button>
-          <p className="mt-2 text-xs text-gray-400 text-center">
-            For demo purposes only
-          </p>
-        </div>
       </div>
     </div>
   );

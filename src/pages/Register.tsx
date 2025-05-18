@@ -137,10 +137,11 @@ const Register = () => {
           <Input
             id="phone"
             type="tel"
-            label="Phone Number (Optional)"
+            label="Phone Number"
             placeholder="(123) 456-7890"
             fullWidth
             {...register('phone', {
+              required: 'Phone number is required',
               pattern: {
                 value: /^[0-9+\-\s()]*$/,
                 message: 'Invalid phone number',

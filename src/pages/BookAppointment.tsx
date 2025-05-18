@@ -202,29 +202,6 @@ const BookAppointment = () => {
     setError(null);
     
     try {
-      // First, check if the user profile exists
-      const { data: userProfile, error: profileError } = await supabase
-        .from('user_profiles')
-        .select('id')
-        .eq('id', user.id)
-        .maybeSingle(); // Use maybeSingle instead of single to handle no results
-      
-      // If profile doesn't exist, create it
-      if (!userProfile) {
-        const { error: createProfileError } = await supabase
-          .from('user_profiles')
-          .insert([{
-            id: user.id,
-            full_name: null,
-            phone: null,
-            is_admin: false,
-          }]);
-        
-        if (createProfileError) throw createProfileError;
-      } else if (profileError) {
-        throw profileError;
-      }
-      
       // Create the appointment
       const { data: appointmentData, error: appointmentError } = await supabase
         .from('appointments')

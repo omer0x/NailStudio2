@@ -27,38 +27,23 @@ const AdminUsers = () => {
       setError(null);
       
       try {
-        // First, fetch user profiles
-        const { data: profiles, error: profileError } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .order('created_at', { ascending: false });
-        
-        if (profileError) throw profileError;
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error('No active session');
 
-        if (!profiles) {
-          throw new Error('No users found');
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/list-users`, {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to fetch users');
         }
 
-        // Then, fetch emails from auth.users using the auth.users() method
-        const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
-
-        if (authError) throw authError;
-
-        // Combine the data
-        const transformedData: UserProfile[] = profiles.map(profile => {
-          const authUser = authUsers.users.find(user => user.id === profile.id);
-          return {
-            id: profile.id,
-            full_name: profile.full_name,
-            phone: profile.phone,
-            is_admin: profile.is_admin,
-            created_at: profile.created_at,
-            email: authUser?.email || 'No email found'
-          };
-        });
-        
-        setUsers(transformedData);
-        setFilteredUsers(transformedData);
+        const users = await response.json();
+        setUsers(users);
+        setFilteredUsers(users);
       } catch (error) {
         console.error('Error fetching users:', error);
         setError('Failed to load users. Please try again.');

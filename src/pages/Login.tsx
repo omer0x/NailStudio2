@@ -15,21 +15,30 @@ const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormData>();
   const [isLoading, setIsLoading] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const { user } = useAuth();
+  const location = useLocation();
   
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
       navigate('/book');
     }
+
+    // Check for success message from registration
+    const state = location.state as { message?: string };
+    if (state?.message) {
+      setSuccessMessage(state.message);
+    }
     
     document.title = 'Login | Medina Nails Studio';
-  }, [user, navigate]);
+  }, [user, navigate, location]);
   
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setLoginError(null);
+    setSuccessMessage(null);
     
     try {
       const { data: userData, error } = await signIn(data.email, data.password);
@@ -54,24 +63,16 @@ const Login = () => {
     }
   };
   
-  // Pre-fill admin credentials for demo
-  const fillAdminCredentials = () => {
-    const form = document.querySelector('form') as HTMLFormElement;
-    if (form) {
-      const emailInput = form.querySelector('input[name="email"]') as HTMLInputElement;
-      const passwordInput = form.querySelector('input[name="password"]') as HTMLInputElement;
-      
-      if (emailInput && passwordInput) {
-        emailInput.value = 'admin@medinanails.com';
-        passwordInput.value = 'password123';
-      }
-    }
-  };
-  
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white rounded-xl shadow-md p-8">
         <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h1>
+        
+        {successMessage && (
+          <div className="mb-4 p-4 rounded bg-green-50 border border-green-100 text-green-700 text-sm">
+            {successMessage}
+          </div>
+        )}
         
         {loginError && (
           <div className="mb-4 p-4 rounded bg-red-50 border border-red-100 text-red-700 text-sm">

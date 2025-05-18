@@ -14,36 +14,28 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 export async function signUp(email: string, password: string, fullName?: string) {
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
-    password, 
-    options: {
-      emailRedirectTo: `${window.location.origin}/login`,
-      data: {
-        full_name: fullName || null
-      }
-    }
+    password
   });
   
   if (authError || !authData.user) {
     return { data: authData, error: authError };
   }
 
+  // Create user profile immediately after signup
   const { error: profileError } = await supabase
     .from('user_profiles')
     .insert([
       {
         id: authData.user.id,
         full_name: fullName || null,
-        is_admin: false
+        is_admin: false,
+        phone: null
       }
     ]);
 
   if (profileError) {
     console.error('Error creating user profile:', profileError);
-    await supabase.auth.signOut();
-    return { 
-      data: null, 
-      error: new Error('Account created but profile setup failed. Please try again.') 
-    };
+    return { data: null, error: new Error('Failed to create user profile. Please try again.') };
   }
 
   return { data: authData, error: null };

@@ -27,9 +27,10 @@ const AdminUsers = () => {
       setError(null);
       
       try {
+        // First, fetch user profiles
         const { data: profiles, error: profileError } = await supabase
           .from('user_profiles')
-          .select('*, auth_user(email)')
+          .select('*')
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;
@@ -38,15 +39,26 @@ const AdminUsers = () => {
           throw new Error('No users found');
         }
 
-        // Transform the data to match our UserProfile interface
-        const transformedData: UserProfile[] = profiles.map(profile => ({
-          id: profile.id,
-          full_name: profile.full_name,
-          phone: profile.phone,
-          is_admin: profile.is_admin,
-          created_at: profile.created_at,
-          email: profile.auth_user?.[0]?.email || 'No email found'
-        }));
+        // Then, fetch emails from auth.users
+        const { data: authUsers, error: authError } = await supabase
+          .from('users')
+          .select('id, email')
+          .in('id', profiles.map(profile => profile.id));
+
+        if (authError) throw authError;
+
+        // Combine the data
+        const transformedData: UserProfile[] = profiles.map(profile => {
+          const authUser = authUsers?.find(user => user.id === profile.id);
+          return {
+            id: profile.id,
+            full_name: profile.full_name,
+            phone: profile.phone,
+            is_admin: profile.is_admin,
+            created_at: profile.created_at,
+            email: authUser?.email || 'No email found'
+          };
+        });
         
         setUsers(transformedData);
         setFilteredUsers(transformedData);

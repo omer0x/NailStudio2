@@ -29,10 +29,7 @@ const AdminUsers = () => {
       try {
         const { data: profiles, error: profileError } = await supabase
           .from('user_profiles')
-          .select(`
-            *,
-            auth_user:auth.users(email)
-          `)
+          .select('*, auth_user(email)')
           .order('created_at', { ascending: false });
         
         if (profileError) throw profileError;

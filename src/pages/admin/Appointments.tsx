@@ -48,30 +48,21 @@ const AdminAppointments = () => {
       setError(null);
       
       try {
-        const { data, error } = await supabase
-          .from('appointments')
-          .select(`
-            id,
-            date,
-            status,
-            notes,
-            created_at,
-            user_profiles (
-              full_name
-            ),
-            time_slot:time_slots (
-              start_time
-            ),
-            services:appointment_services (
-              service:services (
-                name,
-                price
-              )
-            )
-          `)
-          .order('date', { ascending: false });
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) throw new Error('No active session');
+
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/get-appointments`, {
+          headers: {
+            Authorization: `Bearer ${session.access_token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.error || 'Failed to fetch appointments');
+        }
         
-        if (error) throw error;
+        const data = await response.json();
         
         setAppointments(data as Appointment[]);
         setFilteredAppointments(data as Appointment[]);
@@ -209,7 +200,10 @@ const AdminAppointments = () => {
                   <tr key={appointment.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">
-                        {appointment.user_profiles?.full_name || 'Unknown'}
+                        {appointment.user_profiles?.full_name || 'No name provided'}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {appointment.user_profiles?.email}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -303,7 +297,8 @@ const AdminAppointments = () => {
               <div className="space-y-4">
                 <div>
                   <h4 className="text-sm font-medium text-gray-500">Customer</h4>
-                  <p className="text-gray-900">{selectedAppointment.user_profiles?.full_name || 'Unknown'}</p>
+                  <p className="text-gray-900">{selectedAppointment.user_profiles?.full_name || 'No name provided'}</p>
+                  <p className="text-sm text-gray-500">{selectedAppointment.user_profiles?.email}</p>
                 </div>
                 
                 <div>

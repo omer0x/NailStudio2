@@ -37,7 +37,11 @@ const Register = () => {
     setRegisterError(null);
     
     try {
-      const { data: userData, error } = await signUp(data.email, data.password, data.fullName);
+      const { data: userData, error } = await signUp(
+        data.email, 
+        data.password, 
+        data.fullName
+      );
       
       if (error) {
         if (error.message.includes('Email rate limit exceeded')) {

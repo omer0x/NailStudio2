@@ -14,7 +14,12 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
 export async function signUp(email: string, password: string, fullName?: string) {
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
-    password
+    password,
+    options: {
+      data: {
+        full_name: fullName || ''
+      }
+    }
   });
   
   if (authError || !authData.user) {
@@ -27,7 +32,7 @@ export async function signUp(email: string, password: string, fullName?: string)
     .insert([
       {
         id: authData.user.id,
-        full_name: fullName || null,
+        full_name: fullName || '',
         is_admin: false,
         phone: null
       }

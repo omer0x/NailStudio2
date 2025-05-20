@@ -45,7 +45,7 @@ const Header = () => {
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl md:text-2xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-pink-700">
+          <span className="text-xl md:text-2xl font-semibold text-primary">
             Medina Nails
           </span>
         </Link>
@@ -54,8 +54,8 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-6">
           <Link to="/" className={`text-sm font-medium ${
             location.pathname === '/' 
-              ? 'text-pink-600' 
-              : 'text-gray-700 hover:text-pink-500'
+              ? 'text-primary' 
+              : 'text-neutral-dark hover:text-primary'
           } transition-colors`}>
             Home
           </Link>
@@ -64,15 +64,15 @@ const Header = () => {
             <>
               <Link to="/book" className={`text-sm font-medium ${
                 location.pathname === '/book' 
-                  ? 'text-pink-600' 
-                  : 'text-gray-700 hover:text-pink-500'
+                  ? 'text-primary' 
+                  : 'text-neutral-dark hover:text-primary'
               } transition-colors`}>
                 Book Appointment
               </Link>
               <Link to="/my-appointments" className={`text-sm font-medium ${
                 location.pathname === '/my-appointments' 
-                  ? 'text-pink-600' 
-                  : 'text-gray-700 hover:text-pink-500'
+                  ? 'text-primary' 
+                  : 'text-neutral-dark hover:text-primary'
               } transition-colors`}>
                 My Appointments
               </Link>
@@ -82,8 +82,8 @@ const Header = () => {
                   to="/admin"
                   className={`text-sm font-medium flex items-center ${
                     isAdminSection 
-                      ? 'text-pink-600' 
-                      : 'text-gray-700 hover:text-pink-500'
+                      ? 'text-primary' 
+                      : 'text-neutral-dark hover:text-primary'
                   } transition-colors`}
                 >
                   <ShieldCheck size={16} className="mr-1" />
@@ -93,7 +93,7 @@ const Header = () => {
               
               <button
                 onClick={handleSignOut}
-                className="text-sm font-medium text-gray-700 hover:text-pink-500 transition-colors"
+                className="text-sm font-medium text-neutral-dark hover:text-primary transition-colors"
               >
                 Sign Out
               </button>
@@ -102,12 +102,12 @@ const Header = () => {
             <>
               <Link to="/login" className={`text-sm font-medium ${
                 location.pathname === '/login' 
-                  ? 'text-pink-600' 
-                  : 'text-gray-700 hover:text-pink-500'
+                  ? 'text-primary' 
+                  : 'text-neutral-dark hover:text-primary'
               } transition-colors`}>
                 Login
               </Link>
-              <Link to="/register" className="px-4 py-2 rounded-full bg-pink-600 text-white text-sm font-medium hover:bg-pink-700 transition-colors">
+              <Link to="/register" className="px-4 py-2 rounded-full bg-primary text-neutral-light text-sm font-medium hover:bg-primary/90 transition-colors">
                 Register
               </Link>
             </>
@@ -117,7 +117,7 @@ const Header = () => {
             href="https://www.instagram.com/medinanails.studio/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-gray-700 hover:text-pink-500 transition-colors"
+            className="text-neutral-dark hover:text-primary transition-colors"
           >
             <Instagram size={20} />
           </a>
@@ -126,7 +126,7 @@ const Header = () => {
         {/* Mobile Menu Button */}
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden text-gray-700 hover:text-pink-500 transition-colors"
+          className="md:hidden text-neutral-dark hover:text-primary transition-colors"
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -137,8 +137,8 @@ const Header = () => {
         <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg animate-fadeIn">
           <nav className="container mx-auto py-4 px-4 flex flex-col space-y-4">
             <Link to="/" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-              <Home size={20} className="text-pink-600" />
-              <span className="text-gray-700">Home</span>
+              <Home size={20} className="text-primary" />
+              <span className="text-neutral-dark">Home</span>
             </Link>
             
             {user ? (

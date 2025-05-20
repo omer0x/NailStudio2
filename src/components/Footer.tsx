@@ -15,7 +15,7 @@ const Footer = () => {
             </div>
             <p className="text-gray-500 text-sm text-center md:text-left">
               Professional nail care and beauty services. <br />
-              © {currentYear} Medina Nails. All rights reserved.
+              © {currentYear} Medina Nails. All rights reserved. Developed by Omer Musliu
             </p>
           </div>
           

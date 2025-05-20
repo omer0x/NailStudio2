@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase, isUserAdmin } from '../lib/supabase';
+import { useNavigate } from 'react-router-dom';
 
 type AuthContextType = {
   user: User | null;
@@ -25,13 +26,30 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+
+  const clearAuthState = () => {
+    setUser(null);
+    setSession(null);
+    setIsAdmin(false);
+    // Clear any stored tokens from localStorage
+    localStorage.removeItem('sb-zlaebvykohjghpqltzop-auth-token');
+    navigate('/login');
+  };
 
   useEffect(() => {
     // Get the current session
     const getSession = async () => {
       setIsLoading(true);
       try {
-        const { data } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Session error:', error);
+          clearAuthState();
+          return;
+        }
+
         setSession(data.session);
         setUser(data.session?.user || null);
         
@@ -42,6 +60,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
       } catch (error) {
         console.error('Error getting session:', error);
+        clearAuthState();
       } finally {
         setIsLoading(false);
       }
@@ -52,13 +71,28 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Listen for auth changes
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
+        if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
+          clearAuthState();
+          return;
+        }
+
+        if (event === 'TOKEN_REFRESHED' && !newSession) {
+          clearAuthState();
+          return;
+        }
+
         setSession(newSession);
         setUser(newSession?.user || null);
         
         // Update admin status when auth state changes
         if (newSession?.user) {
-          const adminStatus = await isUserAdmin(newSession.user.id);
-          setIsAdmin(adminStatus);
+          try {
+            const adminStatus = await isUserAdmin(newSession.user.id);
+            setIsAdmin(adminStatus);
+          } catch (error) {
+            console.error('Error checking admin status:', error);
+            clearAuthState();
+          }
         } else {
           setIsAdmin(false);
         }
@@ -71,16 +105,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
+  }, [navigate]);
 
   const handleSignOut = async () => {
     try {
       await supabase.auth.signOut();
-      setUser(null);
-      setSession(null);
-      setIsAdmin(false);
+      clearAuthState();
     } catch (error) {
       console.error('Error signing out:', error);
+      // Even if there's an error, clear the state
+      clearAuthState();
     }
   };
 

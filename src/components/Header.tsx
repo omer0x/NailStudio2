@@ -44,18 +44,10 @@ const Header = () => {
     }`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center">
-          <div className="relative flex items-center">
-            <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-0.5 h-12 bg-gradient-to-b from-[#6e5d46] via-[#d4c8a9] to-[#6e5d46]"></div>
-            <div className="relative">
-              <span className="absolute -top-1 -left-1 text-3xl md:text-4xl font-light tracking-wider text-[#d4c8a9]/30 select-none">
-                NAILS STUDIO
-              </span>
-              <span className="relative text-2xl md:text-3xl font-serif text-[#6e5d46] tracking-wide">
-                Medina
-              </span>
-            </div>
-          </div>
+        <Link to="/" className="flex items-center space-x-2">
+          <span className="text-xl md:text-2xl font-semibold text-[#6e5d46]">
+            Medina Nails Studio
+          </span>
         </Link>
         
         {/* Desktop Navigation */}

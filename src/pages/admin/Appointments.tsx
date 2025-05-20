@@ -315,12 +315,12 @@ const AdminAppointments = () => {
                     {selectedAppointment.services.map((item, i) => (
                       <li key={i} className="flex justify-between">
                         <span className="text-gray-900">{item.service.name}</span>
-                        <span className="text-gray-900">${item.service.price}</span>
+                        <span className="text-gray-900">{item.service.price} mkd</span>
                       </li>
                     ))}
                     <li className="flex justify-between border-t border-gray-200 pt-2 mt-2 font-medium">
                       <span>Total</span>
-                      <span>${calculateTotal(selectedAppointment.services)}</span>
+                      <span>{calculateTotal(selectedAppointment.services)} mkd</span>
                     </li>
                   </ul>
                 </div>

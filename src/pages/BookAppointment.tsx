@@ -433,7 +433,7 @@ const BookAppointment = () => {
                         <p className="text-sm text-[#6e5d46]/70 mt-2">{service.description}</p>
                       )}
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-[#6e5d46] font-semibold text-lg">{service.price} mkd</span>
+                        <span className="text-[#6e5d46] font-semibold text-lg">${service.price}</span>
                         <span className="text-sm text-[#6e5d46]/70">{service.duration} min</span>
                       </div>
                     </div>
@@ -449,12 +449,12 @@ const BookAppointment = () => {
                   {getSelectedServices().map(service => (
                     <li key={service.id} className="flex justify-between">
                       <span className="text-[#6e5d46]/80">{service.name}</span>
-                      <span className="font-medium text-[#6e5d46]">{service.price} mkd</span>
+                      <span className="font-medium text-[#6e5d46]">${service.price}</span>
                     </li>
                   ))}
                   <li className="flex justify-between pt-4 mt-2 border-t border-[#6e5d46]/10 font-semibold">
                     <span className="text-[#6e5d46]">Total</span>
-                    <span className="text-[#6e5d46]">{totalPrice} mkd</span>
+                    <span className="text-[#6e5d46]">${totalPrice}</span>
                   </li>
                   <li className="flex justify-between text-sm text-[#6e5d46]/70">
                     <span>Estimated Duration</span>
@@ -622,7 +622,7 @@ const BookAppointment = () => {
                     {getSelectedServices().map(service => (
                       <li key={service.id} className="flex justify-between">
                         <span className="text-[#6e5d46]">{service.name}</span>
-                        <span className="font-medium text-[#6e5d46]">{service.price} mkd</span>
+                        <span className="font-medium text-[#6e5d46]">${service.price}</span>
                       </li>
                     ))}
                   </ul>
@@ -630,7 +630,7 @@ const BookAppointment = () => {
                 
                 <div className="flex justify-between font-semibold text-xl text-[#6e5d46]">
                   <span>Total:</span>
-                  <span className="text-[#6e5d46]">{totalPrice} mkd</span>
+                  <span className="text-[#6e5d46]">${totalPrice}</span>
                 </div>
                 
                 <div className="bg-[#d4c8a9]/30 p-4 rounded-lg border border-[#6e5d46]/20 text-center">

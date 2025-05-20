@@ -51,7 +51,7 @@ const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+      <div className="min-h-screen flex items-center justify-center bg-primary-light">
         <LoadingSpinner size="large" />
         <p className="mt-4 text-gray-600">Loading services...</p>
       </div>
@@ -70,10 +70,10 @@ const Home = () => {
     <div className="space-y-16">
       {/* Hero Section */}
       <section className="flex flex-col items-center text-center -mt-8 mb-8 py-12 px-4">
-        <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-pink-700 mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
           Book Your Perfect Manicure
         </h1>
-        <p className="text-lg text-gray-600 max-w-2xl mb-8">
+        <p className="text-lg text-neutral-dark/70 max-w-2xl mb-8">
           Expert nail care at Medina Nails Studio. Treat yourself to a luxurious experience with our professional services.
         </p>
         {user ? (
@@ -101,13 +101,13 @@ const Home = () => {
       {/* Our Services Section */}
       <section className="py-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">Our Services</h2>
-          <p className="text-gray-600">Experience perfection with our professional nail services</p>
+          <h2 className="text-3xl font-bold text-primary mb-2">Our Services</h2>
+          <p className="text-neutral-dark/70">Experience perfection with our professional nail services</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
-            <div key={service.id} className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+            <div key={service.id} className="bg-neutral-light rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
               {service.image_url && (
                 <img 
                   src={service.image_url} 
@@ -116,12 +116,12 @@ const Home = () => {
                 />
               )}
               <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">{service.name}</h3>
+                <h3 className="text-xl font-semibold text-primary mb-2">{service.name}</h3>
                 {service.description && (
-                  <p className="text-gray-600 mb-4">{service.description}</p>
+                  <p className="text-neutral-dark/70 mb-4">{service.description}</p>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-pink-600 font-semibold">${service.price}</span>
+                  <span className="text-primary font-semibold">${service.price}</span>
                   <Link to={user ? "/book" : "/login"}>
                     <Button variant="secondary" size="sm">
                       Book Now
@@ -143,35 +143,35 @@ const Home = () => {
       </section>
       
       {/* How It Works Section */}
-      <section className="py-12 bg-pink-50 rounded-2xl">
+      <section className="py-12 bg-primary-light/50 rounded-2xl">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">How It Works</h2>
-          <p className="text-gray-600">Book your appointment in 3 simple steps</p>
+          <h2 className="text-3xl font-bold text-primary mb-2">How It Works</h2>
+          <p className="text-neutral-dark/70">Book your appointment in 3 simple steps</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="flex flex-col items-center text-center p-6">
-            <div className="bg-white p-4 rounded-full shadow-md mb-4">
-              <Calendar size={32} className="text-pink-600" />
+            <div className="bg-neutral-light p-4 rounded-full shadow-md mb-4">
+              <Calendar size={32} className="text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">1. Select Services</h3>
-            <p className="text-gray-600">Choose from our wide range of professional nail services</p>
+            <h3 className="text-xl font-semibold text-primary mb-2">1. Select Services</h3>
+            <p className="text-neutral-dark/70">Choose from our wide range of professional nail services</p>
           </div>
           
           <div className="flex flex-col items-center text-center p-6">
-            <div className="bg-white p-4 rounded-full shadow-md mb-4">
-              <Clock size={32} className="text-pink-600" />
+            <div className="bg-neutral-light p-4 rounded-full shadow-md mb-4">
+              <Clock size={32} className="text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">2. Pick a Time</h3>
-            <p className="text-gray-600">Select an available date and time that works for you</p>
+            <h3 className="text-xl font-semibold text-primary mb-2">2. Pick a Time</h3>
+            <p className="text-neutral-dark/70">Select an available date and time that works for you</p>
           </div>
           
           <div className="flex flex-col items-center text-center p-6">
-            <div className="bg-white p-4 rounded-full shadow-md mb-4">
-              <Sparkles size={32} className="text-pink-600" />
+            <div className="bg-neutral-light p-4 rounded-full shadow-md mb-4">
+              <Sparkles size={32} className="text-primary" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">3. Get Beautiful Nails</h3>
-            <p className="text-gray-600">Visit us at your scheduled time and enjoy your service</p>
+            <h3 className="text-xl font-semibold text-primary mb-2">3. Get Beautiful Nails</h3>
+            <p className="text-neutral-dark/70">Visit us at your scheduled time and enjoy your service</p>
           </div>
         </div>
         
@@ -187,34 +187,34 @@ const Home = () => {
       {/* Testimonials Section */}
       <section className="py-12">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-2">What Our Clients Say</h2>
-          <p className="text-gray-600">Hear from our satisfied customers</p>
+          <h2 className="text-3xl font-bold text-primary mb-2">What Our Clients Say</h2>
+          <p className="text-neutral-dark/70">Hear from our satisfied customers</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-white p-6 rounded-lg shadow-md">
+            <div key={testimonial.id} className="bg-neutral-light p-6 rounded-lg shadow-md">
               <div className="flex items-center mb-4">
                 <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
                 <div>
-                  <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                  <div className="flex text-yellow-400">
+                  <h4 className="font-semibold text-primary">{testimonial.name}</h4>
+                  <div className="flex text-primary">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Heart key={i} fill={i < testimonial.rating ? 'currentColor' : 'none'} size={16} />
                     ))}
                   </div>
                 </div>
               </div>
-              <p className="text-gray-600 italic">"{testimonial.comment}"</p>
+              <p className="text-neutral-dark/70 italic">"{testimonial.comment}"</p>
             </div>
           ))}
         </div>
       </section>
       
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-pink-600 to-pink-700 rounded-2xl py-16 px-6 text-center">
-        <h2 className="text-3xl font-bold text-white mb-4">Ready for Beautiful Nails?</h2>
-        <p className="text-white/90 max-w-2xl mx-auto mb-8">
+      <section className="bg-primary rounded-2xl py-16 px-6 text-center">
+        <h2 className="text-3xl font-bold text-neutral-light mb-4">Ready for Beautiful Nails?</h2>
+        <p className="text-neutral-light/90 max-w-2xl mx-auto mb-8">
           Join our satisfied customers and experience the best nail care services at Medina Nails Studio.
         </p>
         <Link to={user ? "/book" : "/register"}>

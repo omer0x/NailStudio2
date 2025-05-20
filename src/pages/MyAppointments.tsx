@@ -173,7 +173,7 @@ const MyAppointments = () => {
             onClick={() => setActiveTab('upcoming')}
             className={`pb-3 px-1 ${
               activeTab === 'upcoming'
-                ? 'border-b-2 border-pink-500 text-pink-600 font-medium'
+                ? 'border-b-2 border-[#6e5d46] text-[#6e5d46] font-medium'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -183,7 +183,7 @@ const MyAppointments = () => {
             onClick={() => setActiveTab('past')}
             className={`pb-3 px-1 ${
               activeTab === 'past'
-                ? 'border-b-2 border-pink-500 text-pink-600 font-medium'
+                ? 'border-b-2 border-[#6e5d46] text-[#6e5d46] font-medium'
                 : 'text-gray-500 hover:text-gray-700'
             }`}
           >
@@ -216,7 +216,7 @@ const MyAppointments = () => {
             <div 
               key={appointment.id} 
               className={`bg-white rounded-lg shadow-sm overflow-hidden ${
-                newAppointmentId === appointment.id ? 'ring-2 ring-pink-500' : ''
+                newAppointmentId === appointment.id ? 'ring-2 ring-[#6e5d46]' : ''
               }`}
             >
               <div className="p-4 sm:p-6">

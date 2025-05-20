@@ -32,8 +32,8 @@ const Layout = ({ children }: LayoutProps) => {
                 href="/admin" 
                 className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium ${
                   location.pathname === '/admin' 
-                    ? 'bg-pink-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-primary text-neutral-light' 
+                    : 'bg-white text-neutral-dark hover:bg-primary-light/50'
                 } shadow-sm transition-colors`}
               >
                 Dashboard
@@ -42,8 +42,8 @@ const Layout = ({ children }: LayoutProps) => {
                 href="/admin/appointments" 
                 className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium ${
                   location.pathname === '/admin/appointments' 
-                    ? 'bg-pink-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-primary text-neutral-light' 
+                    : 'bg-white text-neutral-dark hover:bg-primary-light/50'
                 } shadow-sm transition-colors`}
               >
                 Appointments
@@ -52,8 +52,8 @@ const Layout = ({ children }: LayoutProps) => {
                 href="/admin/services" 
                 className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium ${
                   location.pathname === '/admin/services' 
-                    ? 'bg-pink-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-primary text-neutral-light' 
+                    : 'bg-white text-neutral-dark hover:bg-primary-light/50'
                 } shadow-sm transition-colors`}
               >
                 Services
@@ -62,8 +62,8 @@ const Layout = ({ children }: LayoutProps) => {
                 href="/admin/time-slots" 
                 className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium ${
                   location.pathname === '/admin/time-slots' 
-                    ? 'bg-pink-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-primary text-neutral-light' 
+                    : 'bg-white text-neutral-dark hover:bg-primary-light/50'
                 } shadow-sm transition-colors`}
               >
                 Time Slots
@@ -72,8 +72,8 @@ const Layout = ({ children }: LayoutProps) => {
                 href="/admin/users" 
                 className={`px-4 py-2 whitespace-nowrap rounded-full text-sm font-medium ${
                   location.pathname === '/admin/users' 
-                    ? 'bg-pink-600 text-white' 
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-primary text-neutral-light' 
+                    : 'bg-white text-neutral-dark hover:bg-primary-light/50'
                 } shadow-sm transition-colors`}
               >
                 Users

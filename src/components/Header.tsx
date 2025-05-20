@@ -144,18 +144,18 @@ const Header = () => {
             {user ? (
               <>
                 <Link to="/book" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <Calendar size={20} className="text-pink-600" />
-                  <span className="text-gray-700">Book Appointment</span>
+                  <Calendar size={20} className="text-primary" />
+                  <span className="text-neutral-dark">Book Appointment</span>
                 </Link>
                 <Link to="/my-appointments" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <User size={20} className="text-pink-600" />
-                  <span className="text-gray-700">My Appointments</span>
+                  <User size={20} className="text-primary" />
+                  <span className="text-neutral-dark">My Appointments</span>
                 </Link>
                 
                 {isAdmin && (
                   <Link to="/admin" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                    <Settings size={20} className="text-pink-600" />
-                    <span className="text-gray-700">Admin Dashboard</span>
+                    <Settings size={20} className="text-primary" />
+                    <span className="text-neutral-dark">Admin Dashboard</span>
                   </Link>
                 )}
                 
@@ -163,17 +163,17 @@ const Header = () => {
                   onClick={handleSignOut}
                   className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50 w-full text-left"
                 >
-                  <LogOut size={20} className="text-pink-600" />
-                  <span className="text-gray-700">Sign Out</span>
+                  <LogOut size={20} className="text-primary" />
+                  <span className="text-neutral-dark">Sign Out</span>
                 </button>
               </>
             ) : (
               <>
                 <Link to="/login" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <User size={20} className="text-pink-600" />
-                  <span className="text-gray-700">Login</span>
+                  <User size={20} className="text-primary" />
+                  <span className="text-neutral-dark">Login</span>
                 </Link>
-                <Link to="/register" className="py-2 px-4 rounded-lg bg-pink-600 text-white text-center">
+                <Link to="/register" className="py-2 px-4 rounded-lg bg-primary text-neutral-light text-center">
                   Register
                 </Link>
               </>
@@ -185,8 +185,8 @@ const Header = () => {
               rel="noopener noreferrer"
               className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50"
             >
-              <Instagram size={20} className="text-pink-600" />
-              <span className="text-gray-700">Instagram</span>
+              <Instagram size={20} className="text-primary" />
+              <span className="text-neutral-dark">Instagram</span>
             </a>
           </nav>
         </div>

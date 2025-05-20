@@ -26,14 +26,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(({
       <input
         ref={ref}
         className={`block w-full rounded-lg border-gray-300 shadow-sm 
-          focus:border-pink-500 focus:ring-pink-500
+          focus:border-primary focus:ring-primary/50
           disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed
           ${error ? 'border-red-500' : 'border-gray-300'}
           ${className}`}
         {...props}
       />
       {error && (
-        <p className="mt-1 text-xs text-red-600">{error}</p>
+        <p className="mt-1 text-xs text-red-500">{error}</p>
       )}
     </div>
   );

@@ -12,7 +12,7 @@ const LoadingSpinner = ({ size = 'medium' }: LoadingSpinnerProps) => {
   return (
     <div className="flex justify-center items-center p-4">
       <div 
-        className={`${sizeClasses[size]} rounded-full border-pink-300 border-t-pink-600 animate-spin`} 
+        className={`${sizeClasses[size]} rounded-full border-primary-light border-t-primary animate-spin`} 
         role="status" 
         aria-label="Loading"
       />

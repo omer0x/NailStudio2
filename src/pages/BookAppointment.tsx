@@ -397,8 +397,8 @@ const BookAppointment = () => {
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
         {/* Step 1: Select Services */}
         {step === 1 && (
-          <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          <div className="p-8">
+            <h2 className="text-2xl font-semibold text-[#6e5d46] mb-6">
               Select Your Services
             </h2>
             
@@ -415,8 +415,8 @@ const BookAppointment = () => {
                   onClick={() => handleSelectService(service.id)}
                   className={`border rounded-lg p-4 cursor-pointer transition-all ${
                     bookingData.services.includes(service.id) 
-                      ? 'border-pink-500 bg-pink-50' 
-                      : 'border-gray-200 hover:border-pink-300'
+                      ? 'border-[#6e5d46] bg-[#d4c8a9]/20' 
+                      : 'border-[#d4c8a9] hover:border-[#6e5d46]/50'
                   }`}
                 >
                   <div className="flex items-start">
@@ -424,17 +424,17 @@ const BookAppointment = () => {
                       <img 
                         src={service.image_url} 
                         alt={service.name} 
-                        className="w-16 h-16 object-cover rounded mr-4"
+                        className="w-20 h-20 object-cover rounded-lg mr-4"
                       />
                     )}
                     <div className="flex-1">
-                      <h3 className="font-medium text-gray-800">{service.name}</h3>
+                      <h3 className="text-lg font-medium text-[#6e5d46]">{service.name}</h3>
                       {service.description && (
-                        <p className="text-sm text-gray-600 mt-1">{service.description}</p>
+                        <p className="text-sm text-[#6e5d46]/70 mt-2">{service.description}</p>
                       )}
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-pink-600 font-semibold">${service.price}</span>
-                        <span className="text-xs text-gray-500">{service.duration} min</span>
+                        <span className="text-lg font-semibold text-[#6e5d46]">${service.price}</span>
+                        <span className="text-sm text-[#6e5d46]/70">{service.duration} min</span>
                       </div>
                     </div>
                   </div>
@@ -443,20 +443,20 @@ const BookAppointment = () => {
             </div>
             
             {bookingData.services.length > 0 && (
-              <div className="bg-gray-50 p-4 rounded-lg mb-6">
-                <h3 className="font-medium text-gray-700 mb-2">Selected Services</h3>
+              <div className="bg-[#d4c8a9]/10 p-6 rounded-lg mb-6 border border-[#6e5d46]/10">
+                <h3 className="font-medium text-[#6e5d46] mb-3">Selected Services</h3>
                 <ul className="space-y-2">
                   {getSelectedServices().map(service => (
                     <li key={service.id} className="flex justify-between">
-                      <span>{service.name}</span>
-                      <span className="font-medium">${service.price}</span>
+                      <span className="text-[#6e5d46]/80">{service.name}</span>
+                      <span className="font-medium text-[#6e5d46]">${service.price}</span>
                     </li>
                   ))}
-                  <li className="flex justify-between pt-2 border-t border-gray-200 font-semibold">
-                    <span>Total</span>
-                    <span>${totalPrice}</span>
+                  <li className="flex justify-between pt-3 mt-2 border-t border-[#6e5d46]/10 font-semibold">
+                    <span className="text-[#6e5d46]">Total</span>
+                    <span className="text-lg text-[#6e5d46]">${totalPrice}</span>
                   </li>
-                  <li className="flex justify-between text-sm text-gray-600">
+                  <li className="flex justify-between text-sm text-[#6e5d46]/70 mt-1">
                     <span>Estimated Duration</span>
                     <span>{totalDuration} minutes</span>
                   </li>
@@ -469,6 +469,7 @@ const BookAppointment = () => {
                 onClick={handleNextStep}
                 disabled={bookingData.services.length === 0}
                 rightIcon={<ArrowRight size={16} />}
+                className="px-8"
               >
                 Select Date & Time
               </Button>

@@ -94,7 +94,7 @@ const Register = () => {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white rounded-xl shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Create Your Account</h1>
+        <h1 className="text-2xl font-bold text-center text-primary mb-6">Create Your Account</h1>
         
         {registerError && (
           <div className="mb-4 p-3 rounded bg-red-100 text-red-700 text-sm">
@@ -189,8 +189,8 @@ const Register = () => {
         </form>
         
         <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm">
-            Already have an account? <Link to="/login" className="text-pink-600 hover:underline">Log In</Link>
+          <p className="text-neutral-dark/70 text-sm">
+            Already have an account? <Link to="/login" className="text-primary hover:underline">Log In</Link>
           </p>
         </div>
       </div>

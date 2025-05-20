@@ -13,7 +13,7 @@ const AdminRoute = ({ children }: AdminRouteProps) => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <LoadingSpinner />
+        <LoadingSpinner size="large" />
       </div>
     );
   }

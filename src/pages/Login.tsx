@@ -66,7 +66,7 @@ const Login = () => {
   return (
     <div className="max-w-md mx-auto">
       <div className="bg-white rounded-xl shadow-md p-8">
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">Welcome Back</h1>
+        <h1 className="text-2xl font-bold text-center text-primary mb-6">Welcome Back</h1>
         
         {successMessage && (
           <div className="mb-4 p-4 rounded bg-green-50 border border-green-100 text-green-700 text-sm">
@@ -80,7 +80,7 @@ const Login = () => {
             {loginError.includes('incorrect') && (
               <p className="mt-2 text-sm">
                 Forgot your password?{' '}
-                <Link to="/reset-password" className="text-red-700 hover:underline font-medium">
+                <Link to="/reset-password" className="text-primary hover:underline font-medium">
                   Reset it here
                 </Link>
               </p>
@@ -131,11 +131,11 @@ const Login = () => {
         </form>
         
         <div className="mt-6 text-center space-y-2">
-          <p className="text-gray-600 text-sm">
-            Don't have an account? <Link to="/register" className="text-pink-600 hover:underline">Register</Link>
+          <p className="text-neutral-dark/70 text-sm">
+            Don't have an account? <Link to="/register" className="text-primary hover:underline">Register</Link>
           </p>
-          <p className="text-gray-600 text-sm">
-            <Link to="/reset-password" className="text-pink-600 hover:underline">Forgot your password?</Link>
+          <p className="text-neutral-dark/70 text-sm">
+            <Link to="/reset-password" className="text-primary hover:underline">Forgot your password?</Link>
           </p>
         </div>
       </div>

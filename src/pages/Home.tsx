@@ -212,13 +212,17 @@ const Home = () => {
       </section>
       
       {/* CTA Section */}
-      <section className="bg-primary rounded-2xl py-16 px-6 text-center">
-        <h2 className="text-3xl font-bold text-neutral-light mb-4">Ready for Beautiful Nails?</h2>
-        <p className="text-neutral-light/90 max-w-2xl mx-auto mb-8">
+      <section className="bg-[#6e5d46] rounded-2xl py-16 px-6 text-center">
+        <h2 className="text-3xl font-bold text-[#f0f0f0] mb-4">Ready for Beautiful Nails?</h2>
+        <p className="text-[#f0f0f0]/90 max-w-2xl mx-auto mb-8">
           Join our satisfied customers and experience the best nail care services at Medina Nails Studio.
         </p>
         <Link to={user ? "/book" : "/register"}>
-          <Button variant="secondary" size="lg">
+          <Button 
+            variant="secondary" 
+            size="lg"
+            className="bg-[#d4c8a9] text-[#6e5d46] hover:bg-[#d4c8a9]/80"
+          >
             Book Your Appointment
           </Button>
         </Link>

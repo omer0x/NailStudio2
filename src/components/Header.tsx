@@ -54,7 +54,7 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-6">
           <Link to="/" className={`text-sm font-medium ${
             location.pathname === '/' 
-              ? 'text-[#6e5d46]' 
+              ? 'text-[#6e5d46] font-black' 
               : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
           } transition-colors`}>
             Home
@@ -64,14 +64,14 @@ const Header = () => {
             <>
               <Link to="/book" className={`text-sm font-medium ${
                 location.pathname === '/book' 
-                  ? 'text-[#6e5d46]' 
+                  ? 'text-[#6e5d46] font-black' 
                   : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 Book Appointment
               </Link>
               <Link to="/my-appointments" className={`text-sm font-medium ${
                 location.pathname === '/my-appointments' 
-                  ? 'text-[#6e5d46]' 
+                  ? 'text-[#6e5d46] font-black' 
                   : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 My Appointments
@@ -82,7 +82,7 @@ const Header = () => {
                   to="/admin"
                   className={`text-sm font-medium flex items-center ${
                     isAdminSection 
-                      ? 'text-[#6e5d46]' 
+                      ? 'text-[#6e5d46] font-black' 
                       : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
                   } transition-colors`}
                 >
@@ -102,7 +102,7 @@ const Header = () => {
             <>
               <Link to="/login" className={`text-sm font-medium ${
                 location.pathname === '/login' 
-                  ? 'text-[#6e5d46]' 
+                  ? 'text-[#6e5d46] font-black' 
                   : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 Login

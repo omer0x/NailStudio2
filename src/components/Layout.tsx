@@ -17,8 +17,8 @@ const Layout = ({ children }: LayoutProps) => {
   
   // Set appropriate background color based on the section
   const backgroundColor = isAdminSection
-    ? 'bg-neutral-light'
-    : 'bg-gradient-to-b from-primary-light to-neutral-light';
+    ? 'bg-[#f0f0f0]'
+    : 'bg-gradient-to-b from-[#d4c8a9] via-[#f0f0f0] to-[#f0f0f0]';
 
   return (
     <div className={`min-h-screen flex flex-col ${backgroundColor} transition-colors duration-300`}>

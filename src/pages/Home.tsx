@@ -107,7 +107,7 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service) => (
-            <div key={service.id} className="bg-neutral-light rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+            <div key={service.id} className="bg-neutral-light rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 flex flex-col h-full">
               {service.image_url && (
                 <img 
                   src={service.image_url} 
@@ -115,11 +115,12 @@ const Home = () => {
                   className="w-full h-48 object-cover"
                 />
               )}
-              <div className="p-6">
+              <div className="p-6 flex flex-col flex-grow">
                 <h3 className="text-xl font-semibold text-primary mb-2">{service.name}</h3>
                 {service.description && (
                   <p className="text-neutral-dark/70 mb-4">{service.description}</p>
                 )}
+                <div className="mt-auto pt-4">
                 <div className="flex justify-between items-center">
                   <span className="text-primary font-semibold">{service.price} mkd</span>
                   <Link to={user ? "/book" : "/login"}>
@@ -127,6 +128,7 @@ const Home = () => {
                       Book Now
                     </Button>
                   </Link>
+                </div>
                 </div>
               </div>
             </div>

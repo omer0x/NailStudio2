@@ -1,4 +1,4 @@
-import { Instagram, MessageCircle } from 'lucide-react';
+import { Instagram, Video } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -37,7 +37,7 @@ const Footer = () => {
                 className="p-3 rounded-full bg-[#6e5d46] text-[#d4c8a9] hover:bg-[#6e5d46]/90 transition-colors"
                 aria-label="Threads"
               >
-                <MessageCircle size={20} />
+                <Video size={20} />
               </a>
             </div>
             <p className="text-[#6e5d46]/70 text-sm">

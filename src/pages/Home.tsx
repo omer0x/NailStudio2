@@ -193,19 +193,19 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-neutral-light p-6 rounded-lg shadow-md">
+            <div key={testimonial.id} className="bg-[#f7f4ed] p-8 rounded-2xl shadow-sm border border-[#6e5d46]/10 hover:shadow-md transition-shadow duration-300">
               <div className="flex items-center mb-4">
-                <img src={testimonial.avatar} alt={testimonial.name} className="w-12 h-12 rounded-full mr-4" />
+                <img src={testimonial.avatar} alt={testimonial.name} className="w-14 h-14 rounded-full mr-4 border-2 border-[#d4c8a9]" />
                 <div>
-                  <h4 className="font-semibold text-primary">{testimonial.name}</h4>
-                  <div className="flex text-primary">
+                  <h4 className="font-semibold text-[#6e5d46]">{testimonial.name}</h4>
+                  <div className="flex text-[#d4c8a9]">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <Heart key={i} fill={i < testimonial.rating ? 'currentColor' : 'none'} size={16} />
                     ))}
                   </div>
                 </div>
               </div>
-              <p className="text-neutral-dark/70 italic">"{testimonial.comment}"</p>
+              <p className="text-[#6e5d46]/70 italic leading-relaxed">"{testimonial.comment}"</p>
             </div>
           ))}
         </div>

@@ -21,13 +21,6 @@ const Footer = () => {
           
           <div className="flex flex-col items-center md:items-end">
             <div className="flex space-x-4 mb-4">
-              <a
-                href="tel:+38349123456"
-                className="p-3 rounded-full bg-[#6e5d46] text-[#d4c8a9] hover:bg-[#6e5d46]/90 transition-colors"
-                aria-label="Phone"
-              >
-                <Phone size={20} />
-              </a>
               <a 
                 href="https://www.instagram.com/medinanails.studio/" 
                 target="_blank" 

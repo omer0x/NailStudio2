@@ -39,13 +39,13 @@ const Header = () => {
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${
       scrolled 
-        ? 'bg-white shadow-md py-2' 
-        : 'bg-transparent py-4'
+        ? 'bg-[#d4c8a9]/95 backdrop-blur-sm shadow-md py-2' 
+        : 'bg-transparent py-6'
     }`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <span className="text-xl md:text-2xl font-semibold text-primary">
+          <span className="text-xl md:text-2xl font-semibold text-[#6e5d46]">
             Medina Nails
           </span>
         </Link>
@@ -54,8 +54,8 @@ const Header = () => {
         <nav className="hidden md:flex items-center space-x-6">
           <Link to="/" className={`text-sm font-medium ${
             location.pathname === '/' 
-              ? 'text-primary' 
-              : 'text-neutral-dark hover:text-primary'
+              ? 'text-[#6e5d46]' 
+              : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
           } transition-colors`}>
             Home
           </Link>
@@ -64,15 +64,15 @@ const Header = () => {
             <>
               <Link to="/book" className={`text-sm font-medium ${
                 location.pathname === '/book' 
-                  ? 'text-primary' 
-                  : 'text-neutral-dark hover:text-primary'
+                  ? 'text-[#6e5d46]' 
+                  : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 Book Appointment
               </Link>
               <Link to="/my-appointments" className={`text-sm font-medium ${
                 location.pathname === '/my-appointments' 
-                  ? 'text-primary' 
-                  : 'text-neutral-dark hover:text-primary'
+                  ? 'text-[#6e5d46]' 
+                  : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 My Appointments
               </Link>
@@ -82,8 +82,8 @@ const Header = () => {
                   to="/admin"
                   className={`text-sm font-medium flex items-center ${
                     isAdminSection 
-                      ? 'text-primary' 
-                      : 'text-neutral-dark hover:text-primary'
+                      ? 'text-[#6e5d46]' 
+                      : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
                   } transition-colors`}
                 >
                   <ShieldCheck size={16} className="mr-1" />
@@ -93,7 +93,7 @@ const Header = () => {
               
               <button
                 onClick={handleSignOut}
-                className="text-sm font-medium text-neutral-dark hover:text-primary transition-colors"
+                className="text-sm font-medium text-[#6e5d46]/80 hover:text-[#6e5d46] transition-colors"
               >
                 Sign Out
               </button>
@@ -102,12 +102,12 @@ const Header = () => {
             <>
               <Link to="/login" className={`text-sm font-medium ${
                 location.pathname === '/login' 
-                  ? 'text-primary' 
-                  : 'text-neutral-dark hover:text-primary'
+                  ? 'text-[#6e5d46]' 
+                  : 'text-[#6e5d46]/80 hover:text-[#6e5d46]'
               } transition-colors`}>
                 Login
               </Link>
-              <Link to="/register" className="px-4 py-2 rounded-full bg-primary text-neutral-light text-sm font-medium hover:bg-primary/90 transition-colors">
+              <Link to="/register" className="px-6 py-2.5 rounded-full bg-[#6e5d46] text-[#d4c8a9] text-sm font-medium hover:bg-[#6e5d46]/90 transition-colors">
                 Register
               </Link>
             </>
@@ -117,7 +117,7 @@ const Header = () => {
             href="https://www.instagram.com/medinanails.studio/"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-neutral-dark hover:text-primary transition-colors"
+            className="text-[#6e5d46]/80 hover:text-[#6e5d46] transition-colors"
           >
             <Instagram size={20} />
           </a>
@@ -126,7 +126,7 @@ const Header = () => {
         {/* Mobile Menu Button */}
         <button 
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden text-neutral-dark hover:text-primary transition-colors"
+          className="md:hidden text-[#6e5d46]/80 hover:text-[#6e5d46] transition-colors"
         >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -134,46 +134,46 @@ const Header = () => {
       
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg animate-fadeIn">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-[#d4c8a9]/95 backdrop-blur-sm shadow-lg animate-fadeIn">
           <nav className="container mx-auto py-4 px-4 flex flex-col space-y-4">
-            <Link to="/" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-              <Home size={20} className="text-primary" />
-              <span className="text-neutral-dark">Home</span>
+            <Link to="/" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10">
+              <Home size={20} className="text-[#6e5d46]" />
+              <span className="text-[#6e5d46]/80">Home</span>
             </Link>
             
             {user ? (
               <>
-                <Link to="/book" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <Calendar size={20} className="text-primary" />
-                  <span className="text-neutral-dark">Book Appointment</span>
+                <Link to="/book" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10">
+                  <Calendar size={20} className="text-[#6e5d46]" />
+                  <span className="text-[#6e5d46]/80">Book Appointment</span>
                 </Link>
-                <Link to="/my-appointments" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <User size={20} className="text-primary" />
-                  <span className="text-neutral-dark">My Appointments</span>
+                <Link to="/my-appointments" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10">
+                  <User size={20} className="text-[#6e5d46]" />
+                  <span className="text-[#6e5d46]/80">My Appointments</span>
                 </Link>
                 
                 {isAdmin && (
-                  <Link to="/admin" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                    <Settings size={20} className="text-primary" />
-                    <span className="text-neutral-dark">Admin Dashboard</span>
+                  <Link to="/admin" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10">
+                    <Settings size={20} className="text-[#6e5d46]" />
+                    <span className="text-[#6e5d46]/80">Admin Dashboard</span>
                   </Link>
                 )}
                 
                 <button
                   onClick={handleSignOut}
-                  className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50 w-full text-left"
+                  className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10 w-full text-left"
                 >
-                  <LogOut size={20} className="text-primary" />
-                  <span className="text-neutral-dark">Sign Out</span>
+                  <LogOut size={20} className="text-[#6e5d46]" />
+                  <span className="text-[#6e5d46]/80">Sign Out</span>
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50">
-                  <User size={20} className="text-primary" />
-                  <span className="text-neutral-dark">Login</span>
+                <Link to="/login" className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10">
+                  <User size={20} className="text-[#6e5d46]" />
+                  <span className="text-[#6e5d46]/80">Login</span>
                 </Link>
-                <Link to="/register" className="py-2 px-4 rounded-lg bg-primary text-neutral-light text-center">
+                <Link to="/register" className="py-3 px-4 rounded-lg bg-[#6e5d46] text-[#d4c8a9] text-center font-medium">
                   Register
                 </Link>
               </>
@@ -183,10 +183,10 @@ const Header = () => {
               href="https://www.instagram.com/medinanails.studio/"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-pink-50"
+              className="flex items-center space-x-2 py-2 px-4 rounded-lg hover:bg-[#6e5d46]/10"
             >
-              <Instagram size={20} className="text-primary" />
-              <span className="text-neutral-dark">Instagram</span>
+              <Instagram size={20} className="text-[#6e5d46]" />
+              <span className="text-[#6e5d46]/80">Instagram</span>
             </a>
           </nav>
         </div>

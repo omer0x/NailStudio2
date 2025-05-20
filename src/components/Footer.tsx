@@ -31,7 +31,7 @@ const Footer = () => {
                 <Instagram size={20} />
               </a>
               <a 
-                href="https://www.threads.com/@medinanails.studio" 
+                href="https://www.tiktok.com/@medinanails.studio" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="p-3 rounded-full bg-[#6e5d46] text-[#d4c8a9] hover:bg-[#6e5d46]/90 transition-colors"

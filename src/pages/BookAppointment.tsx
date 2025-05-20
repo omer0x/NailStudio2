@@ -344,48 +344,48 @@ const BookAppointment = () => {
   };
   
   return (
-    <div className="max-w-3xl mx-auto">
+    <div className="max-w-4xl mx-auto">
       {/* Booking Steps */}
-      <div className="mb-8">
+      <div className="mb-12">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step >= 1 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'
+              step >= 1 ? 'bg-[#6e5d46] text-[#f0f0f0]' : 'bg-[#d4c8a9]/50 text-[#6e5d46]/50'
             }`}>
               1
             </div>
             <div className={`ml-2 text-sm font-medium ${
-              step >= 1 ? 'text-gray-700' : 'text-gray-400'
+              step >= 1 ? 'text-[#6e5d46]' : 'text-[#6e5d46]/50'
             }`}>
               Services
             </div>
           </div>
           <div className={`flex-1 h-1 mx-2 ${
-            step >= 2 ? 'bg-pink-600' : 'bg-gray-200'
+            step >= 2 ? 'bg-[#6e5d46]' : 'bg-[#d4c8a9]/50'
           }`}></div>
           <div className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step >= 2 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'
+              step >= 2 ? 'bg-[#6e5d46] text-[#f0f0f0]' : 'bg-[#d4c8a9]/50 text-[#6e5d46]/50'
             }`}>
               2
             </div>
             <div className={`ml-2 text-sm font-medium ${
-              step >= 2 ? 'text-gray-700' : 'text-gray-400'
+              step >= 2 ? 'text-[#6e5d46]' : 'text-[#6e5d46]/50'
             }`}>
               Date & Time
             </div>
           </div>
           <div className={`flex-1 h-1 mx-2 ${
-            step >= 3 ? 'bg-pink-600' : 'bg-gray-200'
+            step >= 3 ? 'bg-[#6e5d46]' : 'bg-[#d4c8a9]/50'
           }`}></div>
           <div className="flex items-center">
             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              step >= 3 ? 'bg-pink-600 text-white' : 'bg-gray-200 text-gray-500'
+              step >= 3 ? 'bg-[#6e5d46] text-[#f0f0f0]' : 'bg-[#d4c8a9]/50 text-[#6e5d46]/50'
             }`}>
               3
             </div>
             <div className={`ml-2 text-sm font-medium ${
-              step >= 3 ? 'text-gray-700' : 'text-gray-400'
+              step >= 3 ? 'text-[#6e5d46]' : 'text-[#6e5d46]/50'
             }`}>
               Confirm
             </div>
@@ -394,10 +394,10 @@ const BookAppointment = () => {
       </div>
       
       {/* Booking Form */}
-      <div className="bg-white rounded-xl shadow-md overflow-hidden">
+      <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-md overflow-hidden border border-[#6e5d46]/10">
         {/* Step 1: Select Services */}
         {step === 1 && (
-          <div className="p-8">
+          <div className="p-6">
             <h2 className="text-2xl font-semibold text-[#6e5d46] mb-6">
               Select Your Services
             </h2>
@@ -416,7 +416,7 @@ const BookAppointment = () => {
                   className={`border rounded-lg p-4 cursor-pointer transition-all ${
                     bookingData.services.includes(service.id) 
                       ? 'border-[#6e5d46] bg-[#d4c8a9]/20' 
-                      : 'border-[#d4c8a9] hover:border-[#6e5d46]/50'
+                      : 'border-[#6e5d46]/10 hover:border-[#6e5d46]/30 hover:bg-[#d4c8a9]/10'
                   }`}
                 >
                   <div className="flex items-start">
@@ -424,16 +424,16 @@ const BookAppointment = () => {
                       <img 
                         src={service.image_url} 
                         alt={service.name} 
-                        className="w-20 h-20 object-cover rounded-lg mr-4"
+                        className="w-20 h-20 object-cover rounded-lg mr-4 shadow-sm"
                       />
                     )}
                     <div className="flex-1">
-                      <h3 className="text-lg font-medium text-[#6e5d46]">{service.name}</h3>
+                      <h3 className="font-medium text-[#6e5d46] text-lg">{service.name}</h3>
                       {service.description && (
                         <p className="text-sm text-[#6e5d46]/70 mt-2">{service.description}</p>
                       )}
                       <div className="flex justify-between items-center mt-2">
-                        <span className="text-lg font-semibold text-[#6e5d46]">${service.price}</span>
+                        <span className="text-[#6e5d46] font-semibold text-lg">${service.price}</span>
                         <span className="text-sm text-[#6e5d46]/70">{service.duration} min</span>
                       </div>
                     </div>
@@ -443,8 +443,8 @@ const BookAppointment = () => {
             </div>
             
             {bookingData.services.length > 0 && (
-              <div className="bg-[#d4c8a9]/10 p-6 rounded-lg mb-6 border border-[#6e5d46]/10">
-                <h3 className="font-medium text-[#6e5d46] mb-3">Selected Services</h3>
+              <div className="bg-[#d4c8a9]/20 p-6 rounded-lg mb-6">
+                <h3 className="font-medium text-[#6e5d46] mb-4">Selected Services</h3>
                 <ul className="space-y-2">
                   {getSelectedServices().map(service => (
                     <li key={service.id} className="flex justify-between">
@@ -452,11 +452,11 @@ const BookAppointment = () => {
                       <span className="font-medium text-[#6e5d46]">${service.price}</span>
                     </li>
                   ))}
-                  <li className="flex justify-between pt-3 mt-2 border-t border-[#6e5d46]/10 font-semibold">
+                  <li className="flex justify-between pt-4 mt-2 border-t border-[#6e5d46]/10 font-semibold">
                     <span className="text-[#6e5d46]">Total</span>
-                    <span className="text-lg text-[#6e5d46]">${totalPrice}</span>
+                    <span className="text-[#6e5d46]">${totalPrice}</span>
                   </li>
-                  <li className="flex justify-between text-sm text-[#6e5d46]/70 mt-1">
+                  <li className="flex justify-between text-sm text-[#6e5d46]/70">
                     <span>Estimated Duration</span>
                     <span>{totalDuration} minutes</span>
                   </li>
@@ -465,7 +465,7 @@ const BookAppointment = () => {
             )}
             
             <div className="flex justify-end">
-              <Button 
+              <Button
                 onClick={handleNextStep}
                 disabled={bookingData.services.length === 0}
                 rightIcon={<ArrowRight size={16} />}
@@ -480,7 +480,7 @@ const BookAppointment = () => {
         {/* Step 2: Select Date and Time */}
         {step === 2 && (
           <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-2xl font-semibold text-[#6e5d46] mb-6">
               Select Date & Time
             </h2>
             
@@ -492,7 +492,7 @@ const BookAppointment = () => {
             
             {/* Date Selection */}
             <div className="mb-6">
-              <h3 className="font-medium text-gray-700 mb-3">
+              <h3 className="font-medium text-[#6e5d46] mb-4 flex items-center">
                 <Calendar size={16} className="inline mr-2" />
                 Select a Date
               </h3>
@@ -503,8 +503,8 @@ const BookAppointment = () => {
                     onClick={() => handleDateChange(date)}
                     className={`px-3 py-2 rounded-lg flex-shrink-0 flex flex-col items-center min-w-[80px] ${
                       format(selectedDate, 'yyyy-MM-dd') === format(date, 'yyyy-MM-dd')
-                        ? 'bg-pink-600 text-white'
-                        : 'bg-white border border-gray-200 text-gray-700 hover:border-pink-300'
+                        ? 'bg-[#6e5d46] text-[#f0f0f0]'
+                        : 'bg-white/80 border border-[#6e5d46]/20 text-[#6e5d46] hover:border-[#6e5d46]/50 hover:bg-[#d4c8a9]/10'
                     }`}
                   >
                     <span className="text-xs font-medium">
@@ -523,7 +523,7 @@ const BookAppointment = () => {
             
             {/* Time Selection */}
             <div className="mb-6">
-              <h3 className="font-medium text-gray-700 mb-3">
+              <h3 className="font-medium text-[#6e5d46] mb-4 flex items-center">
                 <Clock size={16} className="inline mr-2" />
                 Select a Time
               </h3>
@@ -536,8 +536,8 @@ const BookAppointment = () => {
                       onClick={() => handleSelectTimeSlot(slot.id)}
                       className={`px-3 py-2 rounded-lg text-center ${
                         bookingData.timeSlotId === slot.id
-                          ? 'bg-pink-600 text-white'
-                          : 'bg-white border border-gray-200 text-gray-700 hover:border-pink-300'
+                          ? 'bg-[#6e5d46] text-[#f0f0f0]'
+                          : 'bg-white/80 border border-[#6e5d46]/20 text-[#6e5d46] hover:border-[#6e5d46]/50 hover:bg-[#d4c8a9]/10'
                       }`}
                     >
                       {formatTime(slot.start_time)}
@@ -545,22 +545,22 @@ const BookAppointment = () => {
                   ))}
                 </div>
               ) : (
-                <div className="text-center p-6 bg-gray-50 rounded-lg">
-                  <p className="text-gray-500">No available time slots for this date.</p>
-                  <p className="text-sm text-gray-400 mt-1">Please select another date.</p>
+                <div className="text-center p-8 bg-[#d4c8a9]/10 rounded-lg border border-[#6e5d46]/10">
+                  <p className="text-[#6e5d46]/80">No available time slots for this date.</p>
+                  <p className="text-sm text-[#6e5d46]/60 mt-2">Please select another date.</p>
                 </div>
               )}
             </div>
             
             {/* Special Requests */}
             <div className="mb-6">
-              <h3 className="font-medium text-gray-700 mb-3">
+              <h3 className="font-medium text-[#6e5d46] mb-3">
                 Special Requests (Optional)
               </h3>
               <textarea
                 value={bookingData.notes}
                 onChange={handleNotesChange}
-                className="w-full border border-gray-300 rounded-lg p-3 h-24 focus:border-pink-500 focus:ring-pink-500"
+                className="w-full border border-[#6e5d46]/20 rounded-lg p-4 h-32 focus:border-[#6e5d46] focus:ring-[#6e5d46]/30 bg-white/80"
                 placeholder="Any specific preferences or requests..."
               ></textarea>
             </div>
@@ -570,8 +570,9 @@ const BookAppointment = () => {
                 variant="outline" 
                 onClick={handlePrevStep}
                 leftIcon={<ChevronLeft size={16} />}
+                className="px-6"
               >
-                Back to Services
+                Back
               </Button>
               <Button 
                 onClick={handleNextStep}
@@ -587,7 +588,7 @@ const BookAppointment = () => {
         {/* Step 3: Confirm Booking */}
         {step === 3 && (
           <div className="p-6">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
+            <h2 className="text-2xl font-semibold text-[#6e5d46] mb-6">
               Confirm Your Appointment
             </h2>
             
@@ -597,51 +598,51 @@ const BookAppointment = () => {
               </div>
             )}
             
-            <div className="bg-gray-50 p-4 rounded-lg mb-6">
-              <h3 className="font-medium text-gray-700 mb-3">Appointment Details</h3>
+            <div className="bg-[#d4c8a9]/20 p-6 rounded-lg mb-6">
+              <h3 className="font-medium text-[#6e5d46] mb-4">Appointment Details</h3>
               
               <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200 pb-3">
-                  <span className="text-gray-600">Date:</span>
-                  <span className="font-medium text-gray-800">
+                <div className="flex flex-col sm:flex-row sm:justify-between border-b border-[#6e5d46]/10 pb-4">
+                  <span className="text-[#6e5d46]/70">Date:</span>
+                  <span className="font-medium text-[#6e5d46]">
                     {format(parseISO(bookingData.date), 'EEEE, MMMM d, yyyy')}
                   </span>
                 </div>
                 
-                <div className="flex flex-col sm:flex-row sm:justify-between border-b border-gray-200 pb-3">
-                  <span className="text-gray-600">Time:</span>
-                  <span className="font-medium text-gray-800">
+                <div className="flex flex-col sm:flex-row sm:justify-between border-b border-[#6e5d46]/10 pb-4">
+                  <span className="text-[#6e5d46]/70">Time:</span>
+                  <span className="font-medium text-[#6e5d46]">
                     {getSelectedTimeSlot() && formatTime(getSelectedTimeSlot()!.start_time)}
                   </span>
                 </div>
                 
-                <div className="border-b border-gray-200 pb-3">
-                  <span className="text-gray-600">Services:</span>
+                <div className="border-b border-[#6e5d46]/10 pb-4">
+                  <span className="text-[#6e5d46]/70">Services:</span>
                   <ul className="mt-2 space-y-2">
                     {getSelectedServices().map(service => (
                       <li key={service.id} className="flex justify-between">
-                        <span>{service.name}</span>
-                        <span className="font-medium">${service.price}</span>
+                        <span className="text-[#6e5d46]">{service.name}</span>
+                        <span className="font-medium text-[#6e5d46]">${service.price}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
                 
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total Amount:</span>
-                  <span>${totalPrice}</span>
+                <div className="flex justify-between font-semibold text-xl text-[#6e5d46]">
+                  <span>Total:</span>
+                  <span className="text-[#6e5d46]">${totalPrice}</span>
                 </div>
                 
-                <div className="bg-yellow-50 p-3 rounded border border-yellow-200 text-center">
-                  <p className="text-yellow-700">
+                <div className="bg-[#d4c8a9]/30 p-4 rounded-lg border border-[#6e5d46]/20 text-center">
+                  <p className="text-[#6e5d46]">
                     Please pay in cash at the time of your appointment. 💅
                   </p>
                 </div>
                 
                 {bookingData.notes && (
                   <div className="mt-4">
-                    <span className="text-gray-600">Special Requests:</span>
-                    <p className="mt-1 text-gray-800 bg-white p-3 rounded border border-gray-200">
+                    <span className="text-[#6e5d46]/70">Special Requests:</span>
+                    <p className="mt-2 text-[#6e5d46] bg-white/80 p-4 rounded-lg border border-[#6e5d46]/20">
                       {bookingData.notes}
                     </p>
                   </div>
@@ -654,12 +655,14 @@ const BookAppointment = () => {
                 variant="outline" 
                 onClick={handlePrevStep}
                 leftIcon={<ChevronLeft size={16} />}
+                className="px-6"
               >
                 Back
               </Button>
               <Button 
                 onClick={handleSubmitBooking}
                 isLoading={isSubmitting}
+                className="px-8"
               >
                 Confirm Booking
               </Button>

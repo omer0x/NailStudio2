@@ -99,87 +99,43 @@ const Home = () => {
       </section>
       
       {/* Our Services Section */}
-      <section className="py-16 px-4">
+      <section className="py-12">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold text-primary mb-2">Our Services</h2>
           <p className="text-neutral-dark/70">Experience perfection with our professional nail services</p>
         </div>
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="relative group overflow-hidden rounded-2xl">
-            <img 
-              src="https://images.pexels.com/photos/3997391/pexels-photo-3997391.jpeg"
-              alt="Classic Manicure"
-              className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">Classic Manicure</h3>
-                <p className="text-sm text-white/80 mb-4">Perfect your natural nails with our signature manicure</p>
-                <Link to={user ? "/book" : "/login"}>
-                  <Button 
-                    variant="secondary"
-                    className="w-full bg-[#d4c8a9]/90 hover:bg-[#d4c8a9]"
-                  >
-                    Book Now
-                  </Button>
-                </Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {services.map((service) => (
+            <div key={service.id} className="bg-neutral-light rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+              {service.image_url && (
+                <img 
+                  src={service.image_url} 
+                  alt={service.name} 
+                  className="w-full h-48 object-cover"
+                />
+              )}
+              <div className="p-6">
+                <h3 className="text-xl font-semibold text-primary mb-2">{service.name}</h3>
+                {service.description && (
+                  <p className="text-neutral-dark/70 mb-4">{service.description}</p>
+                )}
+                <div className="flex justify-between items-center">
+                  <span className="text-primary font-semibold">${service.price}</span>
+                  <Link to={user ? "/book" : "/login"}>
+                    <Button variant="secondary" size="sm">
+                      Book Now
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="relative group overflow-hidden rounded-2xl">
-            <img 
-              src="https://images.pexels.com/photos/7755108/pexels-photo-7755108.jpeg"
-              alt="Gel Extensions"
-              className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">Gel Extensions</h3>
-                <p className="text-sm text-white/80 mb-4">Beautiful, durable extensions for stunning nails</p>
-                <Link to={user ? "/book" : "/login"}>
-                  <Button 
-                    variant="secondary"
-                    className="w-full bg-[#d4c8a9]/90 hover:bg-[#d4c8a9]"
-                  >
-                    Book Now
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative group overflow-hidden rounded-2xl">
-            <img 
-              src="https://images.pexels.com/photos/8311812/pexels-photo-8311812.jpeg"
-              alt="Nail Art"
-              className="w-full h-[400px] object-cover transition-transform duration-500 group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent">
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                <h3 className="text-xl font-semibold mb-2">Nail Art</h3>
-                <p className="text-sm text-white/80 mb-4">Express yourself with custom nail art designs</p>
-                <Link to={user ? "/book" : "/login"}>
-                  <Button 
-                    variant="secondary"
-                    className="w-full bg-[#d4c8a9]/90 hover:bg-[#d4c8a9]"
-                  >
-                    Book Now
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
         
-        <div className="text-center mt-12">
+        <div className="text-center mt-10">
           <Link to={user ? "/book" : "/login"}>
-            <Button 
-              variant="outline" 
-              size="lg"
-              className="bg-white/80 hover:bg-white"
-            >
+            <Button variant="outline" size="lg">
               View All Services
             </Button>
           </Link>

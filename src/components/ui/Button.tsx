@@ -25,10 +25,10 @@ const Button = ({
   const baseStyles = 'inline-flex items-center justify-center rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2';
   
   const variantStyles = {
-    primary: 'bg-primary text-neutral-light hover:bg-primary/90 focus:ring-primary/50',
-    secondary: 'bg-primary-light text-primary hover:bg-primary-light/80 focus:ring-primary/30',
-    outline: 'bg-transparent text-primary border border-primary hover:bg-primary-light/50 focus:ring-primary/30',
-    ghost: 'bg-transparent text-primary hover:bg-primary-light/50 focus:ring-primary/30',
+    primary: 'bg-[#6e5d46] text-[#f0f0f0] hover:bg-[#6e5d46]/90 focus:ring-[#6e5d46]/50',
+    secondary: 'bg-[#d4c8a9] text-[#6e5d46] hover:bg-[#d4c8a9]/80 focus:ring-[#6e5d46]/30',
+    outline: 'bg-transparent text-[#6e5d46] border border-[#6e5d46] hover:bg-[#d4c8a9]/50 focus:ring-[#6e5d46]/30',
+    ghost: 'bg-transparent text-[#6e5d46] hover:bg-[#d4c8a9]/50 focus:ring-[#6e5d46]/30',
     danger: 'bg-red-600 text-white hover:bg-red-700 focus:ring-red-500',
   };
   
@@ -48,7 +48,7 @@ const Button = ({
       {...props}
     >
       {isLoading && (
-        <span className="w-4 h-4 mr-2 border-2 border-t-transparent border-white rounded-full animate-spin" />
+        <span className="w-4 h-4 mr-2 border-2 border-t-transparent border-current rounded-full animate-spin" />
       )}
       {!isLoading && leftIcon && <span className="mr-2">{leftIcon}</span>}
       {children}

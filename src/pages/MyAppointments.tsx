@@ -260,13 +260,13 @@ const MyAppointments = () => {
                       {appointment.services.map(service => (
                         <li key={service.id} className="flex justify-between text-sm">
                           <span>{service.name}</span>
-                         <span>{service.price} mkd</span>
+                          <span>${service.price}</span>
                         </li>
                       ))}
                       
                       <li className="flex justify-between pt-2 border-t border-gray-200 font-medium">
                         <span>Total</span>
-                       <span>{calculateTotal(appointment.services)} mkd</span>
+                        <span>${calculateTotal(appointment.services)}</span>
                       </li>
                     </ul>
                     

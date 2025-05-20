@@ -121,7 +121,7 @@ const Home = () => {
                   <p className="text-neutral-dark/70 mb-4">{service.description}</p>
                 )}
                 <div className="flex justify-between items-center">
-                  <span className="text-primary font-semibold">{service.price} mkd</span>
+                  <span className="text-primary font-semibold">${service.price}</span>
                   <Link to={user ? "/book" : "/login"}>
                     <Button variant="secondary" size="sm">
                       Book Now

@@ -288,6 +288,11 @@ const BookAppointment = () => {
   const getAvailableTimeSlots = () => {
     const dayOfWeek = selectedDate.getDay();
     
+    // Don't show slots for today or past dates
+    if (isBefore(selectedDate, new Date()) || format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')) {
+      return [];
+    }
+    
     return timeSlots
       .filter(slot => slot.day_of_week === dayOfWeek)
       .filter(slot => !bookedSlots.includes(slot.id));
@@ -317,9 +322,12 @@ const BookAppointment = () => {
   // Get day names for the date selection
   const getDayOptions = () => {
     const days = [];
-    for (let i = 0; i < 14; i++) {
+    for (let i = 1; i < 60; i++) {
       const date = addDays(new Date(), i);
-      days.push(date);
+      // Skip Sundays
+      if (date.getDay() !== 0) {
+        days.push(date);
+      }
     }
     return days;
   };

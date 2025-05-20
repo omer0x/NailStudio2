@@ -118,10 +118,10 @@ const Home = () => {
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-primary mb-2">{service.name}</h3>
                 {service.description && (
-                  <p className="text-neutral-dark/70">{service.description}</p>
+                  <p className="text-neutral-dark/70 mb-4">{service.description}</p>
                 )}
-                <div className="flex flex-col mt-4 space-y-3">
-                  <span className="text-primary font-semibold text-lg">{service.price} mkd</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-primary font-semibold">{service.price} mkd</span>
                   <Link to={user ? "/book" : "/login"}>
                     <Button variant="secondary" size="sm">
                       Book Now

@@ -41,7 +41,7 @@ const Footer = () => {
               </a>
             </div>
             <p className="text-[#6e5d46]/70 text-sm">
-              Questions? Contact us at <a href="mailto:info@medinanails.com" className="text-[#6e5d46] font-medium hover:underline">info@medinanails.com</a> <a href="tel:+38971949746" className="text-[#6e5d46] font-medium hover:underline">+38971949746</a>
+              Questions? Contact us at <a href="tel:+38971949746" className="text-[#6e5d46] font-medium hover:underline">+38971949746</a> or <a href="mailto:info@medinanails.com" className="text-[#6e5d46] font-medium hover:underline">info@medinanails.com</a> 
             </p>
           </div>
         </div>

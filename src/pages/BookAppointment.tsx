@@ -312,7 +312,7 @@ const BookAppointment = () => {
       
       // Add the services to the appointment
       const appointmentServices = bookingData.services.map(serviceId => ({
-        appointment_id: appointmentData.id,
+        appointment_id: appointmentData.id.toString(), // Convert bigint to string
         service_id: serviceId,
       }));
       
@@ -326,7 +326,7 @@ const BookAppointment = () => {
       navigate('/my-appointments', { 
         state: { 
           newBooking: true,
-          appointmentId: appointmentData.id
+          appointmentId: appointmentData.id.toString() // Convert bigint to string
         } 
       });
       
@@ -677,7 +677,9 @@ const BookAppointment = () => {
                 Back
               </Button>
               <Button 
-                onClick={handleNextStep}
+                onClick={handle
+
+NextStep}
                 disabled={!bookingData.timeSlotId}
                 rightIcon={<ArrowRight size={16} />}
               >

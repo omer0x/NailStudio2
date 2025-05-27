@@ -293,31 +293,6 @@ const BookAppointment = () => {
     setError(null);
     
     try {
-      // Calculate total duration and required slots
-      const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
-      const requiredSlots = Math.ceil(totalDuration / 30);
-      
-      // Get the selected time slot
-      const selectedSlot = timeSlots.find(slot => slot.id === bookingData.timeSlotId);
-      if (!selectedSlot) throw new Error('Selected time slot not found');
-      
-      // Get all slots for the selected day
-      const daySlots = timeSlots
-        .filter(slot => slot.day_of_week === selectedSlot.day_of_week)
-        .sort((a, b) => a.start_time.localeCompare(b.start_time));
-      
-      // Find the index of the selected slot
-      const selectedIndex = daySlots.findIndex(slot => slot.id === bookingData.timeSlotId);
-      
-      // Get all required slot IDs
-      const requiredSlotIds = daySlots
-        .slice(selectedIndex, selectedIndex + requiredSlots)
-        .map(slot => slot.id);
-      
-      if (requiredSlotIds.length !== requiredSlots) {
-        throw new Error('Not enough consecutive time slots available');
-      }
-      
       // Create the appointment
       const { data: appointmentData, error: appointmentError } = await supabase
         .from('appointments')
@@ -346,18 +321,6 @@ const BookAppointment = () => {
         .insert(appointmentServices);
       
       if (servicesError) throw servicesError;
-      
-      // Block all required time slots
-      const blockedSlots = requiredSlotIds.map(slotId => ({
-        appointment_id: appointmentData.id,
-        time_slot_id: slotId,
-      }));
-      
-      const { error: blockingError } = await supabase
-        .from('appointments_blocked_slots')
-        .insert(blockedSlots);
-      
-      if (blockingError) throw blockingError;
       
       // Navigate to confirmation or my appointments
       navigate('/my-appointments', { 

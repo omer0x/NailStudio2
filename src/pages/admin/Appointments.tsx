@@ -90,12 +90,21 @@ const AdminAppointments = () => {
   
   const handleUpdateStatus = async (id: string, status: 'confirmed' | 'cancelled') => {
     try {
-      const { error } = await supabase
+      // First, delete any existing blocked slots for this appointment
+      const { error: deleteError } = await supabase
+        .from('appointments_blocked_slots')
+        .delete()
+        .eq('appointment_id', id);
+      
+      if (deleteError) throw deleteError;
+      
+      // Then update the appointment status
+      const { error: updateError } = await supabase
         .from('appointments')
         .update({ status })
         .eq('id', id);
       
-      if (error) throw error;
+      if (updateError) throw updateError;
       
       // Update local state
       setAppointments(prevAppointments =>

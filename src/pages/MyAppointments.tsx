@@ -52,7 +52,8 @@ const MyAppointments = () => {
       setError(null);
       
       try {
-        const { data, error } = await supabase
+        // First fetch appointments with their time slot IDs
+        const { data: appointmentsData, error: appointmentsError } = await supabase
           .from('appointments')
           .select(`
             id,
@@ -60,7 +61,7 @@ const MyAppointments = () => {
             status,
             notes,
             created_at,
-            time_slot:time_slots(start_time, end_time),
+            time_slot_id,
             services:appointment_services(
               service:services(id, name, price)
             )
@@ -68,16 +69,25 @@ const MyAppointments = () => {
           .eq('user_id', user.id)
           .order('date', { ascending: true });
         
-        if (error) throw error;
+        if (appointmentsError) throw appointmentsError;
         
-        // Format the appointments data
-        const formattedAppointments = data.map(appointment => ({
+        // Then fetch time slots for these appointments
+        const timeSlotIds = appointmentsData.map(app => app.time_slot_id);
+        const { data: timeSlotsData, error: timeSlotsError } = await supabase
+          .from('time_slots')
+          .select('id, start_time, end_time')
+          .in('id', timeSlotIds);
+        
+        if (timeSlotsError) throw timeSlotsError;
+        
+        // Combine the data
+        const formattedAppointments = appointmentsData.map(appointment => ({
           id: appointment.id,
           date: appointment.date,
           status: appointment.status,
           notes: appointment.notes,
           created_at: appointment.created_at,
-          time_slot: appointment.time_slot,
+          time_slot: timeSlotsData.find(ts => ts.id === appointment.time_slot_id),
           services: appointment.services.map((s: any) => s.service)
         }));
         
@@ -260,13 +270,13 @@ const MyAppointments = () => {
                       {appointment.services.map(service => (
                         <li key={service.id} className="flex justify-between text-sm">
                           <span>{service.name}</span>
-                         <span>{service.price} mkd</span>
+                          <span>{service.price} mkd</span>
                         </li>
                       ))}
                       
                       <li className="flex justify-between pt-2 border-t border-gray-200 font-medium">
                         <span>Total</span>
-                       <span>{calculateTotal(appointment.services)} mkd</span>
+                        <span>{calculateTotal(appointment.services)} mkd</span>
                       </li>
                     </ul>
                     

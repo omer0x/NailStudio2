@@ -268,6 +268,31 @@ const BookAppointment = () => {
     setError(null);
     
     try {
+      // Calculate total duration and required slots
+      const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
+      const requiredSlots = Math.ceil(totalDuration / 30);
+      
+      // Get the selected time slot
+      const selectedSlot = timeSlots.find(slot => slot.id === bookingData.timeSlotId);
+      if (!selectedSlot) throw new Error('Selected time slot not found');
+      
+      // Get all slots for the selected day
+      const daySlots = timeSlots
+        .filter(slot => slot.day_of_week === selectedSlot.day_of_week)
+        .sort((a, b) => a.start_time.localeCompare(b.start_time));
+      
+      // Find the index of the selected slot
+      const selectedIndex = daySlots.findIndex(slot => slot.id === bookingData.timeSlotId);
+      
+      // Get all required slot IDs
+      const requiredSlotIds = daySlots
+        .slice(selectedIndex, selectedIndex + requiredSlots)
+        .map(slot => slot.id);
+      
+      if (requiredSlotIds.length !== requiredSlots) {
+        throw new Error('Not enough consecutive time slots available');
+      }
+      
       // Create the appointment
       const { data: appointmentData, error: appointmentError } = await supabase
         .from('appointments')
@@ -296,6 +321,18 @@ const BookAppointment = () => {
         .insert(appointmentServices);
       
       if (servicesError) throw servicesError;
+      
+      // Block all required time slots
+      const blockedSlots = requiredSlotIds.map(slotId => ({
+        appointment_id: appointmentData.id,
+        time_slot_id: slotId,
+      }));
+      
+      const { error: blockingError } = await supabase
+        .from('appointments_blocked_slots')
+        .insert(blockedSlots);
+      
+      if (blockingError) throw blockingError;
       
       // Navigate to confirmation or my appointments
       navigate('/my-appointments', { 
@@ -340,26 +377,21 @@ const BookAppointment = () => {
       // Check if we have enough consecutive slots after this one
       const hasEnoughSlots = Array.from({ length: requiredSlots }).every((_, i) => {
         const nextSlot = daySlots[index + i];
-        return nextSlot && !bookedSlots.includes(nextSlot.id);
-      });
-
-      // Check if all required slots are consecutive
-      if (hasEnoughSlots && requiredSlots > 1) {
-        const startTime = daySlots[index].start_time;
-        const [startHour, startMinute] = startTime.split(':').map(Number);
-        const startMinutes = startHour * 60 + startMinute;
-
-        // Check if all subsequent slots are consecutive
-        return Array.from({ length: requiredSlots - 1 }).every((_, i) => {
-          const nextSlot = daySlots[index + i + 1];
-          if (!nextSlot) return false;
-
+        // Check if the slot exists and is not already booked
+        if (!nextSlot || bookedSlots.includes(nextSlot.id)) {
+          return false;
+        }
+        // Check if the slots are consecutive (30 minutes apart)
+        if (i > 0) {
+          const prevSlot = daySlots[index + i - 1];
+          const [prevHour, prevMinute] = prevSlot.start_time.split(':').map(Number);
           const [nextHour, nextMinute] = nextSlot.start_time.split(':').map(Number);
+          const prevMinutes = prevHour * 60 + prevMinute;
           const nextMinutes = nextHour * 60 + nextMinute;
-
-          return nextMinutes === startMinutes + ((i + 1) * 30);
-        });
-      }
+          return nextMinutes === prevMinutes + 30;
+        }
+        return true;
+      });
 
       return hasEnoughSlots;
     });

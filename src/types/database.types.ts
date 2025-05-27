@@ -11,7 +11,7 @@ export interface Database {
     Tables: {
       appointments: {
         Row: {
-          id: number
+          id: string
           user_id: string
           date: string
           time_slot_id: string
@@ -20,7 +20,7 @@ export interface Database {
           created_at: string
         }
         Insert: {
-          id?: number
+          id?: string
           user_id: string
           date: string
           time_slot_id: string
@@ -29,7 +29,7 @@ export interface Database {
           created_at?: string
         }
         Update: {
-          id?: number
+          id?: string
           user_id?: string
           date?: string
           time_slot_id?: string

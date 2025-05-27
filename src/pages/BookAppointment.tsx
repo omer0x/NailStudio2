@@ -29,7 +29,6 @@ interface BookingData {
   date: string;
   timeSlotId: string;
   notes: string;
-  blockedSlots: string[];
 }
 
 const BookAppointment = () => {
@@ -44,7 +43,6 @@ const BookAppointment = () => {
     date: format(new Date(), 'yyyy-MM-dd'),
     timeSlotId: '',
     notes: '',
-    blockedSlots: [],
   });
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalDuration, setTotalDuration] = useState(0);
@@ -189,7 +187,6 @@ const BookAppointment = () => {
       date: format(date, 'yyyy-MM-dd'),
       // Reset time slot when date changes
       timeSlotId: '',
-      blockedSlots: [],
     }));
   };
   
@@ -250,7 +247,6 @@ const BookAppointment = () => {
     setBookingData(prev => ({
       ...prev,
       timeSlotId,
-      blockedSlots: requiredSlotIds,
     }));
   };
   
@@ -297,7 +293,7 @@ const BookAppointment = () => {
     setError(null);
     
     try {
-      // Start a Supabase transaction
+      // Create the appointment
       const { data: appointmentData, error: appointmentError } = await supabase
         .from('appointments')
         .insert([
@@ -325,18 +321,6 @@ const BookAppointment = () => {
         .insert(appointmentServices);
       
       if (servicesError) throw servicesError;
-
-      // Add the blocked slots
-      const blockedSlots = bookingData.blockedSlots.map(slotId => ({
-        appointment_id: appointmentData.id,
-        time_slot_id: slotId,
-      }));
-
-      const { error: blockedSlotsError } = await supabase
-        .from('appointments_blocked_slots')
-        .insert(blockedSlots);
-
-      if (blockedSlotsError) throw blockedSlotsError;
       
       // Navigate to confirmation or my appointments
       navigate('/my-appointments', { 
@@ -748,7 +732,7 @@ const BookAppointment = () => {
                 
                 <div className="flex justify-between font-semibold text-xl text-[#6e5d46]">
                   <span>Total:</span>
-                  <span className="text-[#6e5d46]">{totalPrice} mk</span>
+                  <span className="text-[#6e5d46]">{totalPrice} mkd</span>
                 </div>
                 
                 <div className="bg-[#d4c8a9]/30 p-4 rounded-lg border border-[#6e5d46]/20 text-center">

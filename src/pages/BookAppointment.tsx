@@ -315,53 +315,54 @@ const BookAppointment = () => {
   // Filter available time slots for the selected day
   const getAvailableTimeSlots = () => {
     const dayOfWeek = selectedDate.getDay();
-    
+
     // Don't show slots for today or past dates
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const selectedDateStart = new Date(selectedDate);
     selectedDateStart.setHours(0, 0, 0, 0);
-    
+
     if (selectedDateStart <= today) {
       return [];
     }
-    
+
     // Calculate total duration for selected services
     const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
     const requiredSlots = Math.ceil(totalDuration / 30);
-    
+
     // Get all slots for the day
-    const daySlots = timeSlots.filter(slot => 
-      slot.day_of_week === dayOfWeek && 
-      !bookedSlots.includes(slot.id)
-    );
-    
+    const daySlots = timeSlots
+      .filter(slot => slot.day_of_week === dayOfWeek)
+      .sort((a, b) => a.start_time.localeCompare(b.start_time));
+
     // Filter slots that have enough consecutive availability
     return daySlots.filter((slot, index) => {
       // Check if we have enough consecutive slots after this one
-      return Array.from({ length: requiredSlots }).every((_, i) => {
+      const hasEnoughSlots = Array.from({ length: requiredSlots }).every((_, i) => {
         const nextSlot = daySlots[index + i];
-        return nextSlot && 
-               !bookedSlots.includes(nextSlot.id) &&
-               (i === 0 || isConsecutiveSlot(daySlots[index + i - 1], nextSlot));
+        return nextSlot && !bookedSlots.includes(nextSlot.id);
       });
+
+      // Check if all required slots are consecutive
+      if (hasEnoughSlots && requiredSlots > 1) {
+        const startTime = daySlots[index].start_time;
+        const [startHour, startMinute] = startTime.split(':').map(Number);
+        const startMinutes = startHour * 60 + startMinute;
+
+        // Check if all subsequent slots are consecutive
+        return Array.from({ length: requiredSlots - 1 }).every((_, i) => {
+          const nextSlot = daySlots[index + i + 1];
+          if (!nextSlot) return false;
+
+          const [nextHour, nextMinute] = nextSlot.start_time.split(':').map(Number);
+          const nextMinutes = nextHour * 60 + nextMinute;
+
+          return nextMinutes === startMinutes + ((i + 1) * 30);
+        });
+      }
+
+      return hasEnoughSlots;
     });
-  };
-  
-  // Helper function to check if two slots are consecutive
-  const isConsecutiveSlot = (slot1: TimeSlot, slot2: TimeSlot) => {
-    const [hours1, minutes1] = slot1.end_time.split(':').map(Number);
-    const [hours2, minutes2] = slot2.start_time.split(':').map(Number);
-    const time1 = hours1 * 60 + minutes1;
-    const time2 = hours2 * 60 + minutes2;
-    return time2 - time1 === 0;
-    if (isBefore(selectedDate, new Date()) || format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')) {
-      return [];
-    }
-    
-    return timeSlots
-      .filter(slot => slot.day_of_week === dayOfWeek)
-      .filter(slot => !bookedSlots.includes(slot.id));
   };
   
   if (isLoading) {

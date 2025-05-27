@@ -58,7 +58,7 @@ const AdminDashboard = () => {
         
         if (usersError) throw usersError;
         
-        // Fetch recent appointments
+        // Fetch recent appointments with explicit foreign key relationship
         const { data: recentAppts, error: recentError } = await supabase
           .from('appointments')
           .select(`
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
             status,
             created_at,
             user_profiles(full_name),
-            time_slots(start_time),
+            time_slots!appointments_time_slot_id_fkey(start_time),
             services:appointment_services(services(name))
           `)
           .order('created_at', { ascending: false })

@@ -388,8 +388,8 @@ const BookAppointment = () => {
   // Get day names for the date selection
   const getDayOptions = () => {
     const days = [];
-    // Start from tomorrow (i=1) to prevent same-day bookings
-    for (let i = 1; i < 30; i++) {
+    // Start from tomorrow (i=1) and go up to 60 days ahead
+    for (let i = 1; i < 61; i++) {
       const date = addDays(new Date(), i);
       // Skip Sundays
       if (date.getDay() !== 0) {

@@ -316,6 +316,16 @@ const BookAppointment = () => {
   const getAvailableTimeSlots = () => {
     const dayOfWeek = selectedDate.getDay();
     
+    // Don't show slots for today or past dates
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDateStart = new Date(selectedDate);
+    selectedDateStart.setHours(0, 0, 0, 0);
+    
+    if (selectedDateStart <= today) {
+      return [];
+    }
+    
     // Calculate total duration for selected services
     const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
     const requiredSlots = Math.ceil(totalDuration / 30);
@@ -378,7 +388,8 @@ const BookAppointment = () => {
   // Get day names for the date selection
   const getDayOptions = () => {
     const days = [];
-    for (let i = 1; i < 60; i++) {
+    // Start from tomorrow (i=1) to prevent same-day bookings
+    for (let i = 1; i < 30; i++) {
       const date = addDays(new Date(), i);
       // Skip Sundays
       if (date.getDay() !== 0) {

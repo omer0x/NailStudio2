@@ -191,30 +191,55 @@ const BookAppointment = () => {
   };
   
   const handleSelectTimeSlot = (timeSlotId: string) => {
+    // Get the selected time slot
+    const selectedSlot = timeSlots.find(slot => slot.id === timeSlotId);
+    if (!selectedSlot) return;
+    
     // Calculate total duration of selected services
     const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
     
     // Calculate how many 30-minute slots we need
     const requiredSlots = Math.ceil(totalDuration / 30);
     
-    // Get the selected time slot
-    const selectedSlot = timeSlots.find(slot => slot.id === timeSlotId);
-    if (!selectedSlot) return;
-    
     // Get all slots for the selected day
-    const daySlots = timeSlots.filter(slot => slot.day_of_week === selectedSlot.day_of_week);
+    const daySlots = timeSlots
+      .filter(slot => slot.day_of_week === selectedSlot.day_of_week)
+      .sort((a, b) => a.start_time.localeCompare(b.start_time));
     
     // Find the index of the selected slot
     const selectedIndex = daySlots.findIndex(slot => slot.id === timeSlotId);
     
-    // Check if we have enough consecutive slots available
-    const hasEnoughSlots = Array.from({ length: requiredSlots }).every((_, i) => {
-      const slot = daySlots[selectedIndex + i];
-      return slot && !bookedSlots.includes(slot.id);
+    // Get the required consecutive slots
+    const requiredSlotIds = daySlots
+      .slice(selectedIndex, selectedIndex + requiredSlots)
+      .map(slot => slot.id);
+    
+    // Check if we have enough consecutive slots
+    if (requiredSlotIds.length !== requiredSlots) {
+      setError(`This service requires ${totalDuration} minutes. Please select a time slot with enough available time.`);
+      return;
+    }
+    
+    // Check if any of the required slots are already booked
+    const hasBookedSlot = requiredSlotIds.some(id => bookedSlots.includes(id));
+    
+    // Check if the slots are consecutive (30 minutes apart)
+    const areConsecutive = requiredSlotIds.every((_, i) => {
+      if (i === 0) return true;
+      const currentSlot = daySlots[selectedIndex + i];
+      const prevSlot = daySlots[selectedIndex + i - 1];
+      
+      const [currentHour, currentMin] = currentSlot.start_time.split(':').map(Number);
+      const [prevHour, prevMin] = prevSlot.start_time.split(':').map(Number);
+      
+      const currentMinutes = currentHour * 60 + currentMin;
+      const prevMinutes = prevHour * 60 + prevMin;
+      
+      return currentMinutes === prevMinutes + 30;
     });
     
-    if (!hasEnoughSlots) {
-      setError(`This service requires ${requiredSlots * 30} minutes. Please select a time slot with enough available time.`);
+    if (hasBookedSlot || !areConsecutive) {
+      setError(`This service requires ${totalDuration} minutes. The selected time slot doesn't have enough consecutive available time.`);
       return;
     }
     
@@ -352,48 +377,54 @@ const BookAppointment = () => {
   // Filter available time slots for the selected day
   const getAvailableTimeSlots = () => {
     const dayOfWeek = selectedDate.getDay();
-
+    
     // Don't show slots for today or past dates
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const selectedDateStart = new Date(selectedDate);
-    selectedDateStart.setHours(0, 0, 0, 0);
-
-    if (selectedDateStart <= today) {
+    if (isBefore(selectedDate, new Date()) || format(selectedDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')) {
       return [];
     }
-
+    
     // Calculate total duration for selected services
     const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
     const requiredSlots = Math.ceil(totalDuration / 30);
-
+    
     // Get all slots for the day
     const daySlots = timeSlots
       .filter(slot => slot.day_of_week === dayOfWeek)
       .sort((a, b) => a.start_time.localeCompare(b.start_time));
-
+    
     // Filter slots that have enough consecutive availability
     return daySlots.filter((slot, index) => {
-      // Check if we have enough consecutive slots after this one
-      const hasEnoughSlots = Array.from({ length: requiredSlots }).every((_, i) => {
-        const nextSlot = daySlots[index + i];
-        // Check if the slot exists and is not already booked
-        if (!nextSlot || bookedSlots.includes(nextSlot.id)) {
-          return false;
-        }
-        // Check if the slots are consecutive (30 minutes apart)
-        if (i > 0) {
-          const prevSlot = daySlots[index + i - 1];
-          const [prevHour, prevMinute] = prevSlot.start_time.split(':').map(Number);
-          const [nextHour, nextMinute] = nextSlot.start_time.split(':').map(Number);
-          const prevMinutes = prevHour * 60 + prevMinute;
-          const nextMinutes = nextHour * 60 + nextMinute;
-          return nextMinutes === prevMinutes + 30;
-        }
-        return true;
+      // Get the required consecutive slots
+      const requiredSlotIds = daySlots
+        .slice(index, index + requiredSlots)
+        .map(s => s.id);
+      
+      // Check if we have enough slots
+      if (requiredSlotIds.length !== requiredSlots) {
+        return false;
+      }
+      
+      // Check if any of the slots are booked
+      const hasBookedSlot = requiredSlotIds.some(id => bookedSlots.includes(id));
+      if (hasBookedSlot) {
+        return false;
+      }
+      
+      // Check if the slots are consecutive
+      return requiredSlotIds.every((_, i) => {
+        if (i === 0) return true;
+        
+        const currentSlot = daySlots[index + i];
+        const prevSlot = daySlots[index + i - 1];
+        
+        const [currentHour, currentMin] = currentSlot.start_time.split(':').map(Number);
+        const [prevHour, prevMin] = prevSlot.start_time.split(':').map(Number);
+        
+        const currentMinutes = currentHour * 60 + currentMin;
+        const prevMinutes = prevHour * 60 + prevMin;
+        
+        return currentMinutes === prevMinutes + 30;
       });
-
-      return hasEnoughSlots;
     });
   };
   

@@ -65,7 +65,7 @@ Deno.serve(async (req) => {
           full_name,
           phone
         ),
-        time_slot:time_slots (
+        time_slot:time_slots!appointments_time_slot_id_fkey (
           start_time
         ),
         services:appointment_services (

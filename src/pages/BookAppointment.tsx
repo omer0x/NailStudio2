@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { format, addDays, isAfter, isBefore, parseISO } from 'date-fns';
+import { format, addDays, isPast, parseISO, isBefore } from 'date-fns';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import Button from '../components/ui/Button';
@@ -135,6 +135,12 @@ const BookAppointment = () => {
       
       setTotalPrice(price);
       setTotalDuration(duration);
+      
+      // Reset time slot selection when services change
+      setBookingData(prev => ({
+        ...prev,
+        timeSlotId: '',
+      }));
     } else {
       setTotalPrice(0);
       setTotalDuration(0);
@@ -148,7 +154,7 @@ const BookAppointment = () => {
       
       try {
         const { data, error } = await supabase
-          .from('appointments')
+          .from('appointments_blocked_slots')
           .select('time_slot_id')
           .eq('date', dateStr)
           .not('status', 'eq', 'cancelled');
@@ -165,7 +171,7 @@ const BookAppointment = () => {
       fetchBookedSlots();
     }
   }, [selectedDate, step]);
-  
+
   const handleSelectService = (serviceId: string) => {
     setBookingData(prev => {
       // If already selected, remove it, otherwise add it
@@ -176,6 +182,8 @@ const BookAppointment = () => {
       return {
         ...prev,
         services: updatedServices,
+        // Reset time slot when services change
+        timeSlotId: '',
       };
     });
   };
@@ -195,10 +203,7 @@ const BookAppointment = () => {
     const selectedSlot = timeSlots.find(slot => slot.id === timeSlotId);
     if (!selectedSlot) return;
     
-    // Calculate total duration of selected services
-    const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
-    
-    // Calculate how many 30-minute slots we need
+    // Calculate required slots based on total duration
     const requiredSlots = Math.ceil(totalDuration / 30);
     
     // Get all slots for the selected day
@@ -321,6 +326,34 @@ const BookAppointment = () => {
         .insert(appointmentServices);
       
       if (servicesError) throw servicesError;
+
+      // Calculate required slots based on total duration
+      const selectedSlot = timeSlots.find(slot => slot.id === bookingData.timeSlotId);
+      if (!selectedSlot) throw new Error('Selected time slot not found');
+
+      const requiredSlots = Math.ceil(totalDuration / 30);
+      const daySlots = timeSlots
+        .filter(slot => slot.day_of_week === selectedSlot.day_of_week)
+        .sort((a, b) => a.start_time.localeCompare(b.start_time));
+
+      const selectedIndex = daySlots.findIndex(slot => slot.id === bookingData.timeSlotId);
+      const requiredSlotIds = daySlots
+        .slice(selectedIndex, selectedIndex + requiredSlots)
+        .map(slot => slot.id);
+
+      // Create blocked slots for each required time slot
+      const blockedSlots = requiredSlotIds.map(slotId => ({
+        appointment_id: appointmentData.id,
+        time_slot_id: slotId,
+        date: bookingData.date,
+        status: 'pending'
+      }));
+
+      const { error: blockedSlotsError } = await supabase
+        .from('appointments_blocked_slots')
+        .insert(blockedSlots);
+
+      if (blockedSlotsError) throw blockedSlotsError;
       
       // Navigate to confirmation or my appointments
       navigate('/my-appointments', { 
@@ -346,8 +379,7 @@ const BookAppointment = () => {
       return [];
     }
     
-    // Calculate total duration for selected services
-    const totalDuration = getSelectedServices().reduce((sum, service) => sum + service.duration, 0);
+    // Calculate required slots based on total duration
     const requiredSlots = Math.ceil(totalDuration / 30);
     
     // Get all slots for the day
@@ -443,6 +475,15 @@ const BookAppointment = () => {
   // Get selected time slot details
   const getSelectedTimeSlot = () => {
     return timeSlots.find(slot => slot.id === bookingData.timeSlotId);
+  };
+  
+  // Calculate end time based on duration
+  const getEndTime = (startTime: string, duration: number) => {
+    const [hours, minutes] = startTime.split(':').map(Number);
+    const totalMinutes = hours * 60 + minutes + duration;
+    const endHour = Math.floor(totalMinutes / 60);
+    const endMinutes = totalMinutes % 60;
+    return `${endHour.toString().padStart(2, '0')}:${endMinutes.toString().padStart(2, '0')}`;
   };
   
   return (
@@ -550,7 +591,10 @@ const BookAppointment = () => {
                 <ul className="space-y-2">
                   {getSelectedServices().map(service => (
                     <li key={service.id} className="flex justify-between">
-                      <span className="text-[#6e5d46]/80">{service.name}</span>
+                      <div>
+                        <span className="text-[#6e5d46]/80">{service.name}</span>
+                        <span className="text-sm text-[#6e5d46]/60 ml-2">({service.duration} min)</span>
+                      </div>
                       <span className="font-medium text-[#6e5d46]">{service.price} mkd</span>
                     </li>
                   ))}
@@ -559,7 +603,7 @@ const BookAppointment = () => {
                     <span className="text-[#6e5d46]">{totalPrice} mkd</span>
                   </li>
                   <li className="flex justify-between text-sm text-[#6e5d46]/70">
-                    <span>Estimated Duration</span>
+                    <span>Total Duration</span>
                     <span>{totalDuration} minutes</span>
                   </li>
                 </ul>
@@ -628,23 +672,32 @@ const BookAppointment = () => {
               <h3 className="font-medium text-[#6e5d46] mb-4 flex items-center">
                 <Clock size={16} className="inline mr-2" />
                 Select a Time
+                {totalDuration > 0 && (
+                  <span className="ml-2 text-sm text-[#6e5d46]/70">
+                    (Need {Math.ceil(totalDuration / 30)} slots - {totalDuration} min)
+                  </span>
+                )}
               </h3>
               
               {getAvailableTimeSlots().length > 0 ? (
                 <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                  {getAvailableTimeSlots().map(slot => (
-                    <button
-                      key={slot.id}
-                      onClick={() => handleSelectTimeSlot(slot.id)}
-                      className={`px-3 py-2 rounded-lg text-center ${
-                        bookingData.timeSlotId === slot.id
-                          ? 'bg-[#6e5d46] text-[#f0f0f0]'
-                          : 'bg-white/80 border border-[#6e5d46]/20 text-[#6e5d46] hover:border-[#6e5d46]/50 hover:bg-[#d4c8a9]/10'
-                      }`}
-                    >
-                      {formatTime(slot.start_time)}
-                    </button>
-                  ))}
+                  {getAvailableTimeSlots().map(slot => {
+                    const endTime = getEndTime(slot.start_time, totalDuration);
+                    return (
+                      <button
+                        key={slot.id}
+                        onClick={() => handleSelectTimeSlot(slot.id)}
+                        className={`px-3 py-2 rounded-lg text-center ${
+                          bookingData.timeSlotId === slot.id
+                            ? 'bg-[#6e5d46] text-[#f0f0f0]'
+                            : 'bg-white/80 border border-[#6e5d46]/20 text-[#6e5d46] hover:border-[#6e5d46]/50 hover:bg-[#d4c8a9]/10'
+                        }`}
+                      >
+                        <div className="text-sm">{formatTime(slot.start_time)}</div>
+                        <div className="text-xs opacity-75">to {formatTime(endTime)}</div>
+                      </button>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="text-center p-8 bg-[#d4c8a9]/10 rounded-lg border border-[#6e5d46]/10">
@@ -714,7 +767,15 @@ const BookAppointment = () => {
                 <div className="flex flex-col sm:flex-row sm:justify-between border-b border-[#6e5d46]/10 pb-4">
                   <span className="text-[#6e5d46]/70">Time:</span>
                   <span className="font-medium text-[#6e5d46]">
-                    {getSelectedTimeSlot() && formatTime(getSelectedTimeSlot()!.start_time)}
+                    {getSelectedTimeSlot() && (
+                      <>
+                        {formatTime(getSelectedTimeSlot()!.start_time)} - {' '}
+                        {formatTime(getEndTime(getSelectedTimeSlot()!.start_time, totalDuration))}
+                        <span className="text-sm text-[#6e5d46]/60 ml-2">
+                          ({totalDuration} min)
+                        </span>
+                      </>
+                    )}
                   </span>
                 </div>
                 
@@ -723,7 +784,12 @@ const BookAppointment = () => {
                   <ul className="mt-2 space-y-2">
                     {getSelectedServices().map(service => (
                       <li key={service.id} className="flex justify-between">
-                        <span className="text-[#6e5d46]">{service.name}</span>
+                        <div>
+                          <span className="text-[#6e5d46]">{service.name}</span>
+                          <span className="text-sm text-[#6e5d46]/60 ml-2">
+                            ({service.duration} min)
+                          </span>
+                        </div>
                         <span className="font-medium text-[#6e5d46]">{service.price} mkd</span>
                       </li>
                     ))}
@@ -737,7 +803,7 @@ const BookAppointment = () => {
                 
                 <div className="bg-[#d4c8a9]/30 p-4 rounded-lg border border-[#6e5d46]/20 text-center">
                   <p className="text-[#6e5d46]">
-                    Please pay in cash at the time of your appointment. 💅
+                    Please pay in cash when you arrive. 💅
                   </p>
                 </div>
                 

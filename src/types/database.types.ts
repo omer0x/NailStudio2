@@ -55,6 +55,29 @@ export interface Database {
           service_id?: string
         }
       }
+      appointments_blocked_slots: {
+        Row: {
+          appointment_id: string
+          time_slot_id: string
+          date: string
+          status: 'pending' | 'confirmed' | 'cancelled'
+          created_at: string
+        }
+        Insert: {
+          appointment_id: string
+          time_slot_id: string
+          date: string
+          status?: 'pending' | 'confirmed' | 'cancelled'
+          created_at?: string
+        }
+        Update: {
+          appointment_id?: string
+          time_slot_id?: string
+          date?: string
+          status?: 'pending' | 'confirmed' | 'cancelled'
+          created_at?: string
+        }
+      }
       services: {
         Row: {
           id: string
